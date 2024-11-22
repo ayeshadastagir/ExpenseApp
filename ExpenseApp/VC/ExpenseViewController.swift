@@ -202,15 +202,10 @@ class ExpenseViewController: UIViewController {
             amount: enterAmountTF.text!,
             category: selectCategoryView.selectedCategoryLabel.text!,
             explanation: explainationTF.text!,
-            image: selectedImageData, // Replace with actual Data object
+            image: selectedImageData,
             date: Date()
         )
         dataHandler.saveExpense(expenseData: expense)
-//        dataHandler.saveExpense(amount: enterAmountTF.text!,
-//                                category: selectCategoryView.selectedCategoryLabel.text!,
-//                                explaination: explainationTF.text!,
-//                                image: selectedImageData,
-//                                date: Date())
         setDefaultValue()
         let homeScreen = CustomTabBarController()
         homeScreen.modalTransitionStyle = .crossDissolve
@@ -230,7 +225,7 @@ extension ExpenseViewController: UITableViewDataSource, UITableViewDelegate {
         let card = expenseType[indexPath.row]
         cell.configure(text: card.label, icon: UIImage(named: card.icon))
         cell.selectCategoryType = { [weak self] selectedLabelText, img in
-            self?.selectCategoryView.didUpdateCategory(name: selectedLabelText, img: img)
+            self?.selectCategoryView.didUpdateCategory(name: selectedLabelText ?? "", img: img!)
             self?.resetUI()
         }
         return cell
