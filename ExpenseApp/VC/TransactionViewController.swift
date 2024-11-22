@@ -63,28 +63,31 @@ class TransactionViewController: UIViewController {
     private func fetchData() {
         let dbFetching = DatabaseHandling()
         var incomeRecords: [FinancialRecord] = []
-        if let fetchedIncomeData = dbFetching.fetchIncome() {
-            let (amounts, categories, explanations, images, dates) = fetchedIncomeData
-            incomeRecords = (0..<amounts.count).map { index in
-                IncomeRecord(amount: amounts[index],
-                             category: categories[index],
-                             explanation: explanations[index],
-                             image: images[index],
-                             date: dates[index]
-                )
+
+        if let incomeRecordsData = dbFetching.fetchIncome() {
+            incomeRecords = incomeRecordsData.map { incomeData in
+                let image = UIImage(data: incomeData.image) ?? UIImage(named: "logo")!
+                return IncomeRecord(
+                    amount: incomeData.amount,
+                    category: incomeData.category,
+                    explanation: incomeData.explanation,
+                    image: image,
+                    date: incomeData.date)
             }.map { .income($0) }
         }
         var expenseRecords: [FinancialRecord] = []
-        if let fetchedExpenseData = dbFetching.fetchExpense() {
-            let (amounts, categories, explanations, images, dates) = fetchedExpenseData
-            expenseRecords = (0..<amounts.count).map { index in
-                ExpenseRecord(amount: amounts[index],
-                              category: categories[index],
-                              explanation: explanations[index],
-                              image: images[index],
-                              date: dates[index])
+        if let expenseRecordsData = dbFetching.fetchExpense() {
+            expenseRecords = expenseRecordsData.map { expenseData in
+                let image = UIImage(data: expenseData.image) ?? UIImage(named: "logo")!
+                return ExpenseRecord(amount: expenseData.amount,
+                                     category: expenseData.category,
+                                     explanation: expenseData.explanation,
+                                     image: image,
+                                     date: expenseData.date)
+                
             }.map { .expense($0) }
         }
+
         let allRecords = incomeRecords + expenseRecords
         let sortedRecords = allRecords.sorted { $0.date > $1.date }
         financialRecords = sortedRecords

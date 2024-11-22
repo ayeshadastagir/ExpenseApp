@@ -64,29 +64,32 @@ class HomeViewController: UIViewController {
     
     private func updateIncomeExpenseAmount() {
         let dbFetchingExpense = DatabaseHandling()
+
         if let expenseRecords = dbFetchingExpense.fetchExpense() {
-            let expenseAmounts = expenseRecords.0
             var totalAmount: Int = 0
-            
-            for amountString in expenseAmounts {
-                if let amount = Int(amountString) {
+
+            for expense in expenseRecords {
+                if let amount = Int(expense.amount) {
                     totalAmount += amount
                 }
             }
             expenseView.amountLabel.text = "$" + String(totalAmount)
+        } else {
+            print("No income records found.")
         }
-        
+ 
         let dbFetchingIncome = DatabaseHandling()
         if let incomeRecords = dbFetchingIncome.fetchIncome() {
-            let incomeAmounts = incomeRecords.0
             var totalAmount: Int = 0
-            
-            for amountString in incomeAmounts {
-                if let amount = Int(amountString) {
+
+            for income in incomeRecords {
+                if let amount = Int(income.amount) {
                     totalAmount += amount
                 }
             }
             incomeView.amountLabel.text = "$" + String(totalAmount)
+        } else {
+            print("No income records found.")
         }
     }
     
@@ -94,28 +97,33 @@ class HomeViewController: UIViewController {
         let dbFetching = DatabaseHandling()
         var incomeRecords: [FinancialRecord] = []
         var expenseRecords: [FinancialRecord] = []
-        if let fetchedIncomeData = dbFetching.fetchIncome() {
-            let (amounts, categories, explanations, images, dates) = fetchedIncomeData
-            incomeRecords = (0..<amounts.count).map { index in
-                IncomeRecord(amount: amounts[index],
-                             category: categories[index],
-                             explanation: explanations[index],
-                             image: images[index],
-                             date: dates[index]
+
+        if let incomeRecordsData = dbFetching.fetchIncome() {
+            incomeRecords = incomeRecordsData.map { incomeData in
+                let image = UIImage(data: incomeData.image) ?? UIImage(named: "logo")!
+                return IncomeRecord(
+                    amount: incomeData.amount,
+                    category: incomeData.category,
+                    explanation: incomeData.explanation,
+                    image: image,
+                    date: incomeData.date
                 )
             }.map { .income($0) }
         }
+        
         if let fetchedExpenseData = dbFetching.fetchExpense() {
-            let (amounts, categories, explanations, images, dates) = fetchedExpenseData
-            expenseRecords = (0..<amounts.count).map { index in
-                ExpenseRecord(amount: amounts[index],
-                              category: categories[index],
-                              explanation: explanations[index],
-                              image: images[index],
-                              date: dates[index])
+            expenseRecords = fetchedExpenseData.map { expenseData in
+                let image = UIImage(data: expenseData.image) ?? UIImage(named: "logo")!
+                return ExpenseRecord(
+                    amount: expenseData.amount,
+                    category: expenseData.category,
+                    explanation: expenseData.explanation,
+                    image: image,
+                    date: expenseData.date
+                )
             }.map { .expense($0) }
         }
-        
+
         let allRecords = incomeRecords + expenseRecords
         let sortedRecords = allRecords.sorted { $0.date > $1.date }
         financialRecords = Array(sortedRecords.prefix(5))

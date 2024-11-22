@@ -19,7 +19,7 @@ class DatabaseHandling {
             print("Error occurred while saving income")
         }
     }
-
+    
     func saveExpense(expenseData: ExpenseData) {
         guard let app = UIApplication.shared.delegate as? AppDelegate else { return }
         let context = app.persistentContainer.viewContext
@@ -39,7 +39,7 @@ class DatabaseHandling {
         }
     }
     
-    func fetchIncome() -> ([String], [String], [String], [UIImage], [Date])? {
+    func fetchIncome() -> [IncomeData]? {
         guard let app = UIApplication.shared.delegate as? AppDelegate else { return nil }
         let context = app.persistentContainer.viewContext
         let fetchRequest: NSFetchRequest<Income> = Income.fetchRequest()
@@ -47,37 +47,48 @@ class DatabaseHandling {
         do {
             let incomeData = try context.fetch(fetchRequest)
             print("Income Data has been fetched")
-            let amounts = incomeData.map { $0.amount ?? "" }
-            let categories = incomeData.map { $0.category ?? "" }
-            let explanations = incomeData.map { $0.explaination ?? "" }
-            let images = incomeData.map { UIImage(data: $0.img!) ?? UIImage(named: "logo")! }
-            let dates = incomeData.map { $0.date ?? Date() }
-            return (amounts, categories, explanations, images, dates)
+            
+            let incomeList = incomeData.map { income -> IncomeData in
+                IncomeData(
+                    amount: income.amount ?? "",
+                    category: income.category ?? "",
+                    explanation: income.explaination ?? "",
+                    image: income.img! ,
+                    date: income.date ?? Date()
+                )
+            }
+            return incomeList
         } catch {
-            print("Error occurred during fetching Income Data")
+            print("Error occurred during fetching Income Data: \(error.localizedDescription)")
             return nil
         }
     }
-
-    func fetchExpense() -> ([String], [String], [String], [UIImage], [Date])? {
+    
+    func fetchExpense() -> [ExpenseData]? {
         guard let app = UIApplication.shared.delegate as? AppDelegate else { return nil }
         let context = app.persistentContainer.viewContext
         let fetchRequest: NSFetchRequest<Expense> = Expense.fetchRequest()
         
         do {
             let expenseData = try context.fetch(fetchRequest)
-            print("Expense Data has been fetched")
-            let amounts = expenseData.map { $0.amount ?? "" }
-            let categories = expenseData.map { $0.category ?? "" }
-            let explanations = expenseData.map { $0.explaination ?? "" }
-            let images = expenseData.map { UIImage(data: $0.img!) ?? UIImage(named: "logo")! }
-            let dates = expenseData.map { $0.date ?? Date() }
-            return (amounts, categories, explanations, images, dates)
+            print("Income Data has been fetched")
+            
+            let expenseList = expenseData.map { income -> ExpenseData in
+                ExpenseData(
+                    amount: income.amount ?? "",
+                    category: income.category ?? "",
+                    explanation: income.explaination ?? "",
+                    image: income.img! ,
+                    date: income.date ?? Date()
+                )
+            }
+            return expenseList
         } catch {
-            print("Error occurred during fetching Expense Data")
+            print("Error occurred during fetching Income Data: \(error.localizedDescription)")
             return nil
         }
     }
+    
 }
 
 
@@ -172,3 +183,28 @@ class DatabaseHandling {
 //           print("Error occurred during deleting all Expense Data")
 //       }
 //   }
+//func fetchIncome() -> [IncomeData]? {
+//    guard let app = UIApplication.shared.delegate as? AppDelegate else { return nil }
+//    let context = app.persistentContainer.viewContext
+//    let fetchRequest: NSFetchRequest<Income> = Income.fetchRequest()
+//
+//    do {
+//        let incomeData = try context.fetch(fetchRequest)
+//        print("Income Data has been fetched")
+//
+//        let incomeList = incomeData.map { income -> IncomeData in
+//            IncomeData(
+//                amount: income.amount ?? "",
+//                category: income.category ?? "",
+//                explanation: income.explaination ?? "",
+//                image: UIImage(data: income.img!) ?? UIImage(named: "logo")!, // Provide a default image if `img` is nil
+//                date: income.date ?? Date()
+//            )
+//        }
+//
+//        return incomeList
+//    } catch {
+//        print("Error occurred during fetching Income Data: \(error.localizedDescription)")
+//        return nil
+//    }
+//}
