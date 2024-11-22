@@ -16,7 +16,7 @@ class DatabaseHandling {
             try context.save()
             print("Income Data has been saved")
         } catch {
-            print("Error occurred while saving income")
+            print("Income data cannot be saved")
         }
     }
     
@@ -35,7 +35,7 @@ class DatabaseHandling {
             try context.save()
             print("Expense Data has been saved")
         } catch {
-            print("Error occurred: \(error.localizedDescription)")
+            print("Expense Data cannot be saved")
         }
     }
     
@@ -59,7 +59,7 @@ class DatabaseHandling {
             }
             return incomeList
         } catch {
-            print("Error occurred during fetching Income Data: \(error.localizedDescription)")
+            print("income data cannot be changed")
             return nil
         }
     }
@@ -71,7 +71,7 @@ class DatabaseHandling {
         
         do {
             let expenseData = try context.fetch(fetchRequest)
-            print("Income Data has been fetched")
+            print("expense Data has been fetched")
             
             let expenseList = expenseData.map { income -> ExpenseData in
                 ExpenseData(
@@ -84,12 +84,26 @@ class DatabaseHandling {
             }
             return expenseList
         } catch {
-            print("Error occurred during fetching Income Data: \(error.localizedDescription)")
+            print("expense data cannot be fetched")
             return nil
         }
     }
-    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -64,10 +64,10 @@ class HomeViewController: UIViewController {
     
     private func updateIncomeExpenseAmount() {
         let dbFetchingExpense = DatabaseHandling()
-
+        
         if let expenseRecords = dbFetchingExpense.fetchExpense() {
             var totalAmount: Int = 0
-
+            
             for expense in expenseRecords {
                 if let amount = Int(expense.amount) {
                     totalAmount += amount
@@ -75,13 +75,13 @@ class HomeViewController: UIViewController {
             }
             expenseView.amountLabel.text = "$" + String(totalAmount)
         } else {
-            print("No income records found.")
+            print("No expense records found.")
         }
- 
+        
         let dbFetchingIncome = DatabaseHandling()
         if let incomeRecords = dbFetchingIncome.fetchIncome() {
             var totalAmount: Int = 0
-
+            
             for income in incomeRecords {
                 if let amount = Int(income.amount) {
                     totalAmount += amount
@@ -91,13 +91,14 @@ class HomeViewController: UIViewController {
         } else {
             print("No income records found.")
         }
+        
     }
     
     private func fetchData() {
         let dbFetching = DatabaseHandling()
         var incomeRecords: [FinancialRecord] = []
         var expenseRecords: [FinancialRecord] = []
-
+        
         if let incomeRecordsData = dbFetching.fetchIncome() {
             incomeRecords = incomeRecordsData.map { incomeData in
                 let image = UIImage(data: incomeData.image) ?? UIImage(named: "logo")!
@@ -123,7 +124,7 @@ class HomeViewController: UIViewController {
                 )
             }.map { .expense($0) }
         }
-
+        
         let allRecords = incomeRecords + expenseRecords
         let sortedRecords = allRecords.sorted { $0.date > $1.date }
         financialRecords = Array(sortedRecords.prefix(5))
