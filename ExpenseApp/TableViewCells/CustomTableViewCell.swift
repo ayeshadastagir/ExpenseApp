@@ -5,7 +5,7 @@ class CustomTableViewCell: TableViewCell {
     private let contentBackgroundView = View(backgroundColor: .customPurple.withAlphaComponent(0.1), cornerRadius: 20)
     private let categoryIcon = Image()
     private let categoryLabel = Label(text: "",textColor: .customPurple, font: .systemFont(ofSize: 15))
-    var selectCategoryType: ((String, UIImage) -> Void)?
+    var selectCategoryType: ((String?, UIImage?) -> Void)?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -47,7 +47,7 @@ class CustomTableViewCell: TableViewCell {
     }
     
     @objc func getIncomeType(_ sender: UITapGestureRecognizer) {
-        selectCategoryType?(categoryLabel.text!, categoryIcon.image!)
+        selectCategoryType?(categoryLabel.text, categoryIcon.image )
     }
 }
 

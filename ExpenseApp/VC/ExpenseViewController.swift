@@ -198,11 +198,19 @@ class ExpenseViewController: UIViewController {
         let dataHandler = DatabaseHandling()
         let selectedImage = selectCategoryView.logo.image
         let selectedImageData = selectedImage!.pngData()!
-        dataHandler.saveExpense(amount: enterAmountTF.text!,
-                                category: selectCategoryView.selectedCategoryLabel.text!,
-                                explaination: explainationTF.text!,
-                                image: selectedImageData,
-                                date: Date())
+        let expense = ExpenseData(
+            amount: enterAmountTF.text!,
+            category: selectCategoryView.selectedCategoryLabel.text!,
+            explanation: explainationTF.text!,
+            image: selectedImageData, // Replace with actual Data object
+            date: Date()
+        )
+        dataHandler.saveExpense(expenseData: expense)
+//        dataHandler.saveExpense(amount: enterAmountTF.text!,
+//                                category: selectCategoryView.selectedCategoryLabel.text!,
+//                                explaination: explainationTF.text!,
+//                                image: selectedImageData,
+//                                date: Date())
         setDefaultValue()
         let homeScreen = CustomTabBarController()
         homeScreen.modalTransitionStyle = .crossDissolve

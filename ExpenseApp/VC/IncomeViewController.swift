@@ -191,11 +191,14 @@ class IncomeViewController: UIViewController {
         let dataHandler = DatabaseHandling()
         let selectedImage = selectCategoryView.logo.image
         let selectedImageData = selectedImage!.pngData()!
-        dataHandler.saveIncome(amount: enterAmountTF.text!,
-                               category: selectCategoryView.selectedCategoryLabel.text!,
-                               explaination: explainationTF.text!,
-                               image: selectedImageData,
-                               date: Date())
+        let income = IncomeData(
+            amount: enterAmountTF.text!,
+            category: selectCategoryView.selectedCategoryLabel.text!,
+            explanation: explainationTF.text!,
+            image: selectedImageData,
+            date: Date()
+        )
+        dataHandler.saveIncome(incomeData: income)
         setDefaultValue()
         let homeScreen = CustomTabBarController()
         homeScreen.modalTransitionStyle = .crossDissolve

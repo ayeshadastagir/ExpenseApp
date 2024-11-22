@@ -3,15 +3,15 @@ import CoreData
 
 class DatabaseHandling {
     
-    func saveIncome(amount: String, category: String, explaination: String, image: Data, date: Date) {
+    func saveIncome(incomeData: IncomeData) {
         guard let app = UIApplication.shared.delegate as? AppDelegate else { return }
         let context = app.persistentContainer.viewContext
         let getIncome = NSEntityDescription.insertNewObject(forEntityName: "Income", into: context) as? Income
-        getIncome?.amount = amount
-        getIncome?.category = category
-        getIncome?.explaination = explaination
-        getIncome?.img = image
-        getIncome?.date = date
+        getIncome?.amount = incomeData.amount
+        getIncome?.category = incomeData.category
+        getIncome?.explaination = incomeData.explanation
+        getIncome?.img = incomeData.image
+        getIncome?.date = incomeData.date
         do {
             try context.save()
             print("Income Data has been saved")
@@ -19,21 +19,23 @@ class DatabaseHandling {
             print("Error occurred while saving income")
         }
     }
-    
-    func saveExpense(amount: String, category: String, explaination: String, image: Data, date: Date) {
+
+    func saveExpense(expenseData: ExpenseData) {
         guard let app = UIApplication.shared.delegate as? AppDelegate else { return }
         let context = app.persistentContainer.viewContext
         let getExpense = NSEntityDescription.insertNewObject(forEntityName: "Expense", into: context) as? Expense
-        getExpense?.amount = amount
-        getExpense?.category = category
-        getExpense?.explaination = explaination
-        getExpense?.img = image
-        getExpense?.date = date
+        
+        getExpense?.amount = expenseData.amount
+        getExpense?.category = expenseData.category
+        getExpense?.explaination = expenseData.explanation
+        getExpense?.img = expenseData.image
+        getExpense?.date = expenseData.date
+        
         do {
             try context.save()
             print("Expense Data has been saved")
         } catch {
-            print("Error occurred")
+            print("Error occurred: \(error.localizedDescription)")
         }
     }
     
@@ -56,7 +58,7 @@ class DatabaseHandling {
             return nil
         }
     }
-    
+
     func fetchExpense() -> ([String], [String], [String], [UIImage], [Date])? {
         guard let app = UIApplication.shared.delegate as? AppDelegate else { return nil }
         let context = app.persistentContainer.viewContext
