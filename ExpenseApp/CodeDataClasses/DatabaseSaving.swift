@@ -16,7 +16,7 @@ class DatabaseHandling {
             try context.save()
             print("Income Data has been saved")
         } catch {
-            print("Error occurred")
+            print("Error occurred while saving income")
         }
     }
     
