@@ -1,7 +1,7 @@
 import UIKit
 
 class Button: UIButton {
-    init(title: String = "", image: String = "", backgroundColor: UIColor = .clear, tintColor: UIColor = .white, cornerRadius: CGFloat = 0, fontSize: CGFloat = 15) {
+    init(title: String = "", image: String = "", backgroundColor: UIColor = .clear, tintColor: UIColor = .white, cornerRadius: CGFloat = 0, fontSize: CGFloat = 15.autoSized) {
         super.init(frame: .zero)
         self.translatesAutoresizingMaskIntoConstraints = false
         self.setTitle(title, for: .normal)

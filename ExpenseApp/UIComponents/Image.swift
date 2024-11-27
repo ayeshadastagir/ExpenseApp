@@ -1,7 +1,7 @@
 import UIKit
 
 class Image: UIImageView {
-    init(image: String = "", contentMode: UIView.ContentMode = .scaleAspectFit, cornerRadius: CGFloat = 15, backgroundColor: UIColor = .clear) {
+    init(image: String = "", contentMode: UIView.ContentMode = .scaleAspectFit, cornerRadius: CGFloat = 15.autoSized, backgroundColor: UIColor = .clear) {
         super.init(frame: .zero)
         self.translatesAutoresizingMaskIntoConstraints = false
         self.image = UIImage(named: image)

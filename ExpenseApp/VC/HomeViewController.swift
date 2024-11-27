@@ -3,11 +3,11 @@ import UIKit
 class HomeViewController: UIViewController {
     
     private var financialRecords: [FinancialRecord] = []
-    private let welcomeLabel = Label(text: "Welcome to Home",textColor: .customPurple, font: .systemFont(ofSize: 40, weight: .semibold))
+    private let welcomeLabel = Label(text: "Welcome to Home",textColor: .customPurple, font: .systemFont(ofSize: 40.autoSized, weight: .semibold))
     private let incomeView = CardView(backgroundColor: .customGreen, image: "incomeicon", text: "Income")
     private let expenseView = CardView(backgroundColor: .customRed, image: "expenseicon", text: "Expense")
     private let walletView = CardView(backgroundColor: .customBlue, image: "wallet", text: "Wallet")
-    private let recentTransactionLabel = Label(text: "Recent Transactions", textColor: .customPurple, font: .systemFont(ofSize: 20, weight: .semibold), hidden: true)
+    private let recentTransactionLabel = Label(text: "Recent Transactions", textColor: .customPurple, font: .systemFont(ofSize: 20.autoSized, weight: .semibold), hidden: true)
     private lazy var transactionsTableView: UITableView = {
         let tv = UITableView()
         tv.dataSource = self
@@ -17,7 +17,6 @@ class HomeViewController: UIViewController {
         tv.clipsToBounds = true
         tv.isHidden = true
         tv.showsVerticalScrollIndicator = false
-        tv.layer.cornerRadius = 0
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.register(TransactionTableViewCell.self, forCellReuseIdentifier: TransactionTableViewCell.reuseIdentifier)
         return tv
@@ -40,7 +39,7 @@ class HomeViewController: UIViewController {
         view.addSubview(transactionsTableView)
         
         NSLayoutConstraint.activate([
-            welcomeLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            welcomeLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20.autoSized),
             welcomeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             incomeView.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 20.autoSized),
@@ -70,19 +69,17 @@ class HomeViewController: UIViewController {
     }
     
     private func updateAmounts() {
-        let dbFetchingExpense = DatabaseHandling()
+        let dbFetching = DatabaseHandling()
         var totalExpense: Int = 0
-        if let expenseRecords = dbFetchingExpense?.fetchExpense() {
+        if let expenseRecords = dbFetching?.fetchExpense() {
             expenseRecords.forEach {
                 if let amount = Int($0.amount) {totalExpense += amount } }
             expenseView.amountLabel.text = "$" + String(totalExpense)
         } else {
             print("No expense records found.")
         }
-        
-        let dbFetchingIncome = DatabaseHandling()
         var totalIncome: Int = 0
-        if let incomeRecords = dbFetchingIncome?.fetchIncome() {
+        if let incomeRecords = dbFetching?.fetchIncome() {
             incomeRecords.forEach {
                 if let amount = Int($0.amount) { totalIncome += amount } }
             incomeView.amountLabel.text = "$" + String(totalIncome)

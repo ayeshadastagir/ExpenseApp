@@ -7,15 +7,15 @@ class IncomeViewController: UIViewController {
         IncomeCategory(icon: "other", label: "Others"),
     ]
     private let incomeLabelView: View = {
-        let v = View(backgroundColor: .customPurple, cornerRadius: 25)
-        v.layer.borderWidth = 2
+        let v = View(backgroundColor: .customPurple, cornerRadius: 25.autoSized)
+        v.layer.borderWidth = 2.autoSized
         v.layer.borderColor = UIColor.white.cgColor
         return v
     }()
-    private let incomeLabel = Label(text: "Income", textColor: .white, font: .systemFont(ofSize: 25, weight: .bold))
-    private let howMuchLabel = Label(text: "How much?", textColor: .white.withAlphaComponent(0.5), font: .systemFont(ofSize: 20, weight: .semibold))
+    private let incomeLabel = Label(text: "Income", textColor: .white, font: .systemFont(ofSize: 25.autoSized, weight: .bold))
+    private let howMuchLabel = Label(text: "How much?", textColor: .white.withAlphaComponent(0.5), font: .systemFont(ofSize: 20.autoSized, weight: .semibold))
     private lazy var enterAmountTF: UITextField = {
-        let tf = TextField(textColor: .white, font: .systemFont(ofSize: 50, weight: .bold), placeholder: "Enter Amount")
+        let tf = TextField(textColor: .white, font: .systemFont(ofSize: 50.autoSized, weight: .bold), placeholder: "Enter Amount")
         tf.layer.borderWidth = 0
         tf.isEnabled = true
         tf.textAlignment = .left
@@ -23,11 +23,11 @@ class IncomeViewController: UIViewController {
         tf.addTarget(self, action: #selector(validateFields), for: .editingChanged)
         return tf
     }()
-    private let incomeDetailView = View(cornerRadius: 30)
+    private let incomeDetailView = View(cornerRadius: 30.autoSized)
     private lazy var selectCategoryView: CategoryView = {
         let view = CategoryView()
         view.layer.borderColor = UIColor.systemGray4.cgColor
-        view.layer.borderWidth = 1
+        view.layer.borderWidth = 1.autoSized
         let tap = UITapGestureRecognizer(target: self, action: #selector(selectIncome(_:)))
         view.addGestureRecognizer(tap)
         return view
@@ -45,18 +45,17 @@ class IncomeViewController: UIViewController {
         tv.allowsSelection = false
         tv.clipsToBounds = true
         tv.showsVerticalScrollIndicator = false
-        tv.layer.cornerRadius = 20
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.reuseIdentifier)
         return tv
     }()
     private lazy var explainationTF: TextField = {
-        let tf = TextField(font: .systemFont(ofSize: 15), placeholder: "Description", cornerRadius: 25)
+        let tf = TextField(font: .systemFont(ofSize: 15.autoSized), placeholder: "Description", cornerRadius: 25.autoSized)
         tf.addTarget(self, action: #selector(validateFields), for: .editingChanged)
         return tf
     }()
     private lazy var addButton: Button = {
-        let btn = Button(title: "ADD", backgroundColor: .customGreen, cornerRadius: 25)
+        let btn = Button(title: "ADD", backgroundColor: .customGreen, cornerRadius: 25.autoSized)
         btn.isEnabled = false
         btn.alpha = 0.5
         btn.addTarget(self, action: #selector(dataSaved), for: .touchUpInside)
@@ -107,7 +106,7 @@ class IncomeViewController: UIViewController {
             incomeDetailView.topAnchor.constraint(equalTo: enterAmountTF.bottomAnchor, constant: 100.autoSized),
             incomeDetailView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             incomeDetailView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            incomeDetailView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 30),
+            incomeDetailView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 30.autoSized),
             
             selectCategoryView.topAnchor.constraint(equalTo: incomeDetailView.topAnchor, constant: 40.autoSized),
             selectCategoryView.leadingAnchor.constraint(equalTo: incomeDetailView.leadingAnchor, constant: 25.widthRatio),
@@ -117,9 +116,9 @@ class IncomeViewController: UIViewController {
             tableBackgroundView.trailingAnchor.constraint(equalTo: selectCategoryView.trailingAnchor),
             tableBackgroundView.bottomAnchor.constraint(equalTo: selectCategoryView.bottomAnchor),
             
-            tableView.leadingAnchor.constraint(equalTo: tableBackgroundView.leadingAnchor, constant: 10),
-            tableView.trailingAnchor.constraint(equalTo: tableBackgroundView.trailingAnchor, constant: -10),
-            tableView.bottomAnchor.constraint(equalTo: tableBackgroundView.bottomAnchor, constant: -10),
+            tableView.leadingAnchor.constraint(equalTo: tableBackgroundView.leadingAnchor, constant: 10.widthRatio),
+            tableView.trailingAnchor.constraint(equalTo: tableBackgroundView.trailingAnchor, constant: -10.widthRatio),
+            tableView.bottomAnchor.constraint(equalTo: tableBackgroundView.bottomAnchor, constant: -10.autoSized),
             
             explainationTF.topAnchor.constraint(equalTo: selectCategoryView.bottomAnchor, constant: 15.autoSized),
             explainationTF.leadingAnchor.constraint(equalTo: incomeDetailView.leadingAnchor, constant: 25.widthRatio),
@@ -129,12 +128,12 @@ class IncomeViewController: UIViewController {
             addButton.heightAnchor.constraint(equalToConstant: 60.autoSized),
             addButton.leadingAnchor.constraint(equalTo: incomeDetailView.leadingAnchor, constant: 25.widthRatio),
             addButton.trailingAnchor.constraint(equalTo: incomeDetailView.trailingAnchor, constant: -25.widthRatio),
-            addButton.bottomAnchor.constraint(equalTo: incomeDetailView.bottomAnchor, constant: -150),
+            addButton.bottomAnchor.constraint(equalTo: incomeDetailView.bottomAnchor, constant: -150.autoSized),
         ])
         categoryViewHeight = selectCategoryView.heightAnchor.constraint(equalToConstant: 60.autoSized)
         categoryViewHeight.isActive = true
         tableBackgroundViewTop = tableBackgroundView.topAnchor.constraint(equalTo: selectCategoryView.logo.bottomAnchor, constant: 5.autoSized)
-        tableViewTop = tableView.topAnchor.constraint(equalTo: tableBackgroundView.topAnchor, constant: 10)
+        tableViewTop = tableView.topAnchor.constraint(equalTo: tableBackgroundView.topAnchor, constant: 10.autoSized)
     }
     
     @objc func selectIncome(_ sender: UITapGestureRecognizer? = nil) {

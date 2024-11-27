@@ -2,11 +2,11 @@ import UIKit
 
 class CardView: UIView {
     
-    private let cardImage = Image(cornerRadius: 25)
-    private let titleLabel = Label(text: "", textColor: .white, font: .systemFont(ofSize: 15))
-    let amountLabel = Label(text: "", font: .systemFont(ofSize: 30, weight: .semibold))
+    private let cardImage = Image(cornerRadius: 25.autoSized)
+    private let titleLabel = Label(text: "", textColor: .white, font: .systemFont(ofSize: 15.autoSized))
+    let amountLabel = Label(text: "", font: .systemFont(ofSize: 30.autoSized, weight: .semibold))
     
-    init(backgroundColor: UIColor, cornerRadius: CGFloat = 30, image: String, text: String, amtText: String = "$0") {
+    init(backgroundColor: UIColor, cornerRadius: CGFloat = 30.autoSized, image: String, text: String, amtText: String = "$0") {
         super.init(frame: .zero)
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = backgroundColor

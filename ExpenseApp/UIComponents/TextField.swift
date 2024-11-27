@@ -13,7 +13,7 @@ class TextField: UITextField {
         self.autocorrectionType = .no
         self.placeholder = placeholder
         self.layer.cornerRadius = cornerRadius
-        self.layer.borderWidth = 1
+        self.layer.borderWidth = 1.autoSized
         self.layer.borderColor = color
     }
     required init?(coder: NSCoder) {

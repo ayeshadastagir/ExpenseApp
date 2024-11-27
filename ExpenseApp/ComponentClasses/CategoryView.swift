@@ -2,8 +2,8 @@ import UIKit
 
 class CategoryView: UIView {
     
-    let selectedCategoryLabel = Label(text: "Category",textColor: .systemGray4, font: .systemFont(ofSize: 15))
-    let logo = Image(image: "category", cornerRadius: 15)
+    let selectedCategoryLabel = Label(text: "Category",textColor: .systemGray4, font: .systemFont(ofSize: 15.autoSized))
+    let logo = Image(image: "category", cornerRadius: 15.autoSized)
     private let dropdownImage = Image(image: "dropDown")
     
     init() {
@@ -11,9 +11,9 @@ class CategoryView: UIView {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = .white
         self.clipsToBounds = true
-        self.layer.borderWidth = 2
+        self.layer.borderWidth = 2.autoSized
         self.layer.borderColor = UIColor.systemGray4.cgColor
-        self.layer.cornerRadius = 25
+        self.layer.cornerRadius = 25.autoSized
         setupUI()
     }
     

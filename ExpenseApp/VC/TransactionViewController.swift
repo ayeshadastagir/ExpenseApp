@@ -2,12 +2,12 @@ import UIKit
 
 class TransactionViewController: UIViewController {
     
-    private let financialReportLabel = Label(text: "Financial Report", textColor: .customPurple, font: .systemFont(ofSize: 25, weight: .semibold), textAlignment: .left)
+    private let financialReportLabel = Label(text: "Financial Report", textColor: .customPurple, font: .systemFont(ofSize: 25.autoSized, weight: .semibold), textAlignment: .left)
     private var financialRecords: [FinancialRecord] = []
     private var filteredRecords: [FinancialRecord] = []
-    private lazy var searchTextField: UITextField = {
-        let tf = TextField( textAlignment: .left, font: .systemFont(ofSize: 15), placeholder: "Transaction Details", cornerRadius: 15, color: UIColor.customPurple.cgColor)
-        let PaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: tf.frame.height))
+    private lazy var searchTextField: TextField = {
+        let tf = TextField( textAlignment: .left, font: .systemFont(ofSize: 15.autoSized), placeholder: "Transaction Details", cornerRadius: 15.autoSized, color: UIColor.customPurple.cgColor)
+        let PaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20.autoSized, height: tf.frame.height))
         tf.leftView = PaddingView
         tf.leftViewMode = .always
         tf.rightView = PaddingView
@@ -25,7 +25,6 @@ class TransactionViewController: UIViewController {
         tv.clipsToBounds = true
         tv.isHidden = true
         tv.showsVerticalScrollIndicator = false
-        tv.layer.cornerRadius = 0
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.register(TransactionTableViewCell.self, forCellReuseIdentifier: TransactionTableViewCell.reuseIdentifier)
         return tv
@@ -110,19 +109,15 @@ class TransactionViewController: UIViewController {
             transactionsTableView.reloadData()
             return
         }
-        filteredRecords = financialRecords.filter { record in
-            switch record {
+        filteredRecords = financialRecords.filter {
+            let recordText: String
+            switch $0 {
             case .income(let incomeRecord):
-                return incomeRecord.category.lowercased().contains(searchText.lowercased()) ||
-                incomeRecord.explanation.lowercased().contains(searchText.lowercased()) ||
-                incomeRecord.amount.contains(searchText) ||
-                incomeRecord.date.formattedString().lowercased().contains(searchText.lowercased())
+                recordText = "\(incomeRecord.category) \(incomeRecord.explanation) \(incomeRecord.amount) \(incomeRecord.date.formattedString())"
             case .expense(let expenseRecord):
-                return expenseRecord.category.lowercased().contains(searchText.lowercased()) ||
-                expenseRecord.explanation.lowercased().contains(searchText.lowercased()) ||
-                expenseRecord.amount.contains(searchText) ||
-                expenseRecord.date.formattedString().lowercased().contains(searchText.lowercased())
+                recordText = "\(expenseRecord.category) \(expenseRecord.explanation) \(expenseRecord.amount) \(expenseRecord.date.formattedString())"
             }
+            return recordText.lowercased().contains(searchText.lowercased())
         }
         transactionsTableView.reloadData()
     }
@@ -154,7 +149,6 @@ extension TransactionViewController: UITableViewDataSource, UITableViewDelegate 
                            color: .customRed,
                            date: expenseRecord.date.formattedString())
             return cell
-            
         }
     }
 }
