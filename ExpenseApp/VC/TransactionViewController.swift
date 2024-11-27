@@ -113,9 +113,9 @@ class TransactionViewController: UIViewController {
             let recordText: String
             switch $0 {
             case .income(let incomeRecord):
-                recordText = "\(incomeRecord.category) \(incomeRecord.explanation) \(incomeRecord.amount) \(incomeRecord.date.formattedString())"
+                recordText = "\(incomeRecord.category) \(incomeRecord.explanation) \(incomeRecord.amount) \(incomeRecord.date.formattedString() + "$+")"
             case .expense(let expenseRecord):
-                recordText = "\(expenseRecord.category) \(expenseRecord.explanation) \(expenseRecord.amount) \(expenseRecord.date.formattedString())"
+                recordText = "\(expenseRecord.category) \(expenseRecord.explanation) \(expenseRecord.amount) \(expenseRecord.date.formattedString() + "-$+")"
             }
             return recordText.lowercased().contains(searchText.lowercased())
         }
