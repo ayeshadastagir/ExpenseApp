@@ -1,4 +1,5 @@
 import UIKit
+import AudioToolbox
 
 class TextField: UITextField {
     init(textColor: UIColor = .black, textAlignment: NSTextAlignment = .center, borderWidth: CGFloat = 0, font: UIFont, placeholder: String = "", cornerRadius: CGFloat = 0 ,color: CGColor = UIColor.systemGray4.cgColor) {
@@ -27,6 +28,7 @@ extension TextField {
         animation.duration = 0.6
         animation.values = [-20.0, 20.0, -20.0, 20.0, -10.0, 10.0, -5.0, 5.0, 0.0]
         self.layer.add(animation, forKey: "shake")
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
     }
 }
 
