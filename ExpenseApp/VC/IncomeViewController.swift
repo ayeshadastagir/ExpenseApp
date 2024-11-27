@@ -198,7 +198,7 @@ class IncomeViewController: UIViewController {
             image: selectedImageData,
             date: Date()
         )
-        dataHandler.saveIncome(incomeData: income)
+        dataHandler?.saveIncome(incomeData: income)
         setDefaultValue()
         let homeScreen = CustomTabBarController()
         homeScreen.modalTransitionStyle = .crossDissolve

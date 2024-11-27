@@ -6,6 +6,7 @@ class HomeViewController: UIViewController {
     private let welcomeLabel = Label(text: "Welcome to Home",textColor: .customPurple, font: .systemFont(ofSize: 40, weight: .semibold))
     private let incomeView = CardView(backgroundColor: .customGreen, image: "incomeicon", text: "Income")
     private let expenseView = CardView(backgroundColor: .customRed, image: "expenseicon", text: "Expense")
+    private let walletView = CardView(backgroundColor: .customBlue, image: "wallet", text: "Wallet")
     private let recentTransactionLabel = Label(text: "Recent Transactions", textColor: .customPurple, font: .systemFont(ofSize: 20, weight: .semibold), hidden: true)
     private lazy var transactionsTableView: UITableView = {
         let tv = UITableView()
@@ -26,7 +27,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupUI()
-        updateIncomeExpenseAmount()
+        updateAmounts()
         fetchData()
     }
     
@@ -34,6 +35,7 @@ class HomeViewController: UIViewController {
         view.addSubview(welcomeLabel)
         view.addSubview(incomeView)
         view.addSubview(expenseView)
+        view.addSubview(walletView)
         view.addSubview(recentTransactionLabel)
         view.addSubview(transactionsTableView)
         
@@ -44,14 +46,19 @@ class HomeViewController: UIViewController {
             incomeView.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 20.autoSized),
             incomeView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20.widthRatio),
             incomeView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20.widthRatio),
-            incomeView.heightAnchor.constraint(equalToConstant: 120.autoSized),
+            incomeView.heightAnchor.constraint(equalToConstant: 100.autoSized),
             
             expenseView.topAnchor.constraint(equalTo: incomeView.bottomAnchor, constant: 10.autoSized),
             expenseView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20.widthRatio),
             expenseView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20.widthRatio),
-            expenseView.heightAnchor.constraint(equalToConstant: 120.autoSized),
+            expenseView.heightAnchor.constraint(equalToConstant: 100.autoSized),
             
-            recentTransactionLabel.topAnchor.constraint(equalTo: expenseView.bottomAnchor, constant: 10.autoSized),
+            walletView.topAnchor.constraint(equalTo: expenseView.bottomAnchor, constant: 10.autoSized),
+            walletView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20.widthRatio),
+            walletView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20.widthRatio),
+            walletView.heightAnchor.constraint(equalToConstant: 100.autoSized),
+            
+            recentTransactionLabel.topAnchor.constraint(equalTo: walletView.bottomAnchor, constant: 10.autoSized),
             recentTransactionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20.widthRatio),
             recentTransactionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20.widthRatio),
             
@@ -62,36 +69,28 @@ class HomeViewController: UIViewController {
         ])
     }
     
-    private func updateIncomeExpenseAmount() {
+    private func updateAmounts() {
         let dbFetchingExpense = DatabaseHandling()
-        
-        if let expenseRecords = dbFetchingExpense.fetchExpense() {
-            var totalAmount: Int = 0
-            
-            for expense in expenseRecords {
-                if let amount = Int(expense.amount) {
-                    totalAmount += amount
-                }
-            }
-            expenseView.amountLabel.text = "$" + String(totalAmount)
+        var totalExpense: Int = 0
+        if let expenseRecords = dbFetchingExpense?.fetchExpense() {
+            expenseRecords.forEach {
+                if let amount = Int($0.amount) {totalExpense += amount } }
+            expenseView.amountLabel.text = "$" + String(totalExpense)
         } else {
             print("No expense records found.")
         }
         
         let dbFetchingIncome = DatabaseHandling()
-        if let incomeRecords = dbFetchingIncome.fetchIncome() {
-            var totalAmount: Int = 0
-            
-            for income in incomeRecords {
-                if let amount = Int(income.amount) {
-                    totalAmount += amount
-                }
-            }
-            incomeView.amountLabel.text = "$" + String(totalAmount)
+        var totalIncome: Int = 0
+        if let incomeRecords = dbFetchingIncome?.fetchIncome() {
+            incomeRecords.forEach {
+                if let amount = Int($0.amount) { totalIncome += amount } }
+            incomeView.amountLabel.text = "$" + String(totalIncome)
         } else {
             print("No income records found.")
         }
-        
+        let balance = totalIncome - totalExpense
+        walletView.amountLabel.text = "$" + String(balance)
     }
     
     private func fetchData() {
@@ -99,7 +98,7 @@ class HomeViewController: UIViewController {
         var incomeRecords: [FinancialRecord] = []
         var expenseRecords: [FinancialRecord] = []
         
-        if let incomeRecordsData = dbFetching.fetchIncome() {
+        if let incomeRecordsData = dbFetching?.fetchIncome() {
             incomeRecords = incomeRecordsData.map { incomeData in
                 let image = UIImage(data: incomeData.image) ?? UIImage(named: "logo")!
                 return IncomeRecord(
@@ -112,7 +111,7 @@ class HomeViewController: UIViewController {
             }.map { .income($0) }
         }
         
-        if let fetchedExpenseData = dbFetching.fetchExpense() {
+        if let fetchedExpenseData = dbFetching?.fetchExpense() {
             expenseRecords = fetchedExpenseData.map { expenseData in
                 let image = UIImage(data: expenseData.image) ?? UIImage(named: "logo")!
                 return ExpenseRecord(
@@ -147,20 +146,28 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TransactionTableViewCell", for: indexPath) as! TransactionTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: TransactionTableViewCell.reuseIdentifier, for: indexPath) as! TransactionTableViewCell
         let record = financialRecords[indexPath.row]
         switch record {
         case .income(let incomeRecord):
-            cell.configure(categoryLabelText: incomeRecord.category,
-                           descriptionLabelText: incomeRecord.explanation,
-                           amountLabelText: "+ $" + incomeRecord.amount,
-                           icon: incomeRecord.image, color: .customGreen, date: incomeRecord.date.formattedString())
+            cell.configure(
+                categoryLabelText: incomeRecord.category,
+                descriptionLabelText: incomeRecord.explanation,
+                amountLabelText: "+ $" + incomeRecord.amount,
+                icon: incomeRecord.image,
+                color: .customGreen,
+                date: incomeRecord.date.formattedString()
+            )
             return cell
         case .expense(let expenseRecord):
-            cell.configure(categoryLabelText: expenseRecord.category,
-                           descriptionLabelText: expenseRecord.explanation,
-                           amountLabelText: "- $" + expenseRecord.amount,
-                           icon: expenseRecord.image, color: .customRed, date: expenseRecord.date.formattedString())
+            cell.configure(
+                categoryLabelText: expenseRecord.category,
+                descriptionLabelText: expenseRecord.explanation,
+                amountLabelText: "- $" + expenseRecord.amount,
+                icon: expenseRecord.image,
+                color: .customRed,
+                date: expenseRecord.date.formattedString()
+            )
             return cell
         }
     }

@@ -13,7 +13,7 @@ class ExpenseViewController: UIViewController {
         ExpenseCategory(icon: "invest", label: "Investment"),
         ExpenseCategory(icon: "other", label: "Others"),
     ]
-    private let expenseLabelView: UIView = {
+    private let expenseLabelView: View = {
         let v = View(backgroundColor: .customPurple, cornerRadius: 25)
         v.layer.borderWidth = 2
         v.layer.borderColor = UIColor.white.cgColor
@@ -191,6 +191,7 @@ class ExpenseViewController: UIViewController {
         enterAmountTF.text = ""
         explainationTF.text = ""
         selectCategoryView.selectedCategoryLabel.text = "Category"
+        selectCategoryView.logo.image = UIImage(named: "category")
         selectCategoryView.selectedCategoryLabel.textColor = .systemGray3
     }
     
@@ -205,12 +206,23 @@ class ExpenseViewController: UIViewController {
             image: selectedImageData,
             date: Date()
         )
-        dataHandler.saveExpense(expenseData: expense)
-        setDefaultValue()
-        let homeScreen = CustomTabBarController()
-        homeScreen.modalTransitionStyle = .crossDissolve
-        homeScreen.modalPresentationStyle = .fullScreen
-        self.present(homeScreen, animated: true, completion: nil)
+        if dataHandler?.saveExpense(expenseData: expense) == true {
+            setDefaultValue()
+            let homeScreen = CustomTabBarController()
+            homeScreen.modalTransitionStyle = .crossDissolve
+            homeScreen.modalPresentationStyle = .fullScreen
+            self.present(homeScreen, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(
+                title: "Cannot Add Expense",
+                message: "You need to add income first or your expenses exceed your total income.",
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
+            setDefaultValue()
+
+        }
     }
 }
 

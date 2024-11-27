@@ -171,15 +171,6 @@
 			path = TableViewCells;
 			sourceTree = "<group>";
 		};
-		7BB3C3532CEDC490005D3D64 /* DelegateMethods */ = {
-			isa = PBXGroup;
-			children = (
-				7BE039602CE31D5200AB5170 /* AppDelegate.swift */,
-				7BE039622CE31D5200AB5170 /* SceneDelegate.swift */,
-			);
-			path = DelegateMethods;
-			sourceTree = "<group>";
-		};
 		7BB3C3542CEDC4AA005D3D64 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -211,9 +202,10 @@
 		7BE0395F2CE31D5200AB5170 /* ExpenseApp */ = {
 			isa = PBXGroup;
 			children = (
+				7BE039602CE31D5200AB5170 /* AppDelegate.swift */,
+				7BE039622CE31D5200AB5170 /* SceneDelegate.swift */,
 				7BE039712CE31D5500AB5170 /* Info.plist */,
 				7BB3C3542CEDC4AA005D3D64 /* Resources */,
-				7BB3C3532CEDC490005D3D64 /* DelegateMethods */,
 				7B11B4032CEB4D7400C99BA1 /* Models */,
 				7BE039AF2CE3235D00AB5170 /* Extensions */,
 				7BE039AC2CE3232700AB5170 /* ComponentClasses */,

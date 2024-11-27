@@ -64,7 +64,7 @@ class TransactionViewController: UIViewController {
         let dbFetching = DatabaseHandling()
         var incomeRecords: [FinancialRecord] = []
 
-        if let incomeRecordsData = dbFetching.fetchIncome() {
+        if let incomeRecordsData = dbFetching?.fetchIncome() {
             incomeRecords = incomeRecordsData.map { incomeData in
                 let image = UIImage(data: incomeData.image) ?? UIImage(named: "logo")!
                 return IncomeRecord(
@@ -76,7 +76,7 @@ class TransactionViewController: UIViewController {
             }.map { .income($0) }
         }
         var expenseRecords: [FinancialRecord] = []
-        if let expenseRecordsData = dbFetching.fetchExpense() {
+        if let expenseRecordsData = dbFetching?.fetchExpense() {
             expenseRecords = expenseRecordsData.map { expenseData in
                 let image = UIImage(data: expenseData.image) ?? UIImage(named: "logo")!
                 return ExpenseRecord(amount: expenseData.amount,
@@ -135,7 +135,7 @@ extension TransactionViewController: UITableViewDataSource, UITableViewDelegate 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TransactionTableViewCell", for: indexPath) as! TransactionTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: TransactionTableViewCell.reuseIdentifier, for: indexPath) as! TransactionTableViewCell
         let record = filteredRecords[indexPath.row]
         switch record {
         case .income(let incomeRecord):
