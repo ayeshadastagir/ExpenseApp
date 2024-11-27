@@ -1,7 +1,6 @@
 import UIKit
 
 class ExpenseViewController: UIViewController {
-    
     private let expenseType: [ExpenseCategory] = [
         ExpenseCategory(icon: "bill", label: "Bills"),
         ExpenseCategory(icon: "food", label: "Food"),
@@ -39,7 +38,7 @@ class ExpenseViewController: UIViewController {
         view.addGestureRecognizer(tap)
         return view
     }()
-    private let tableBackgroundView: UIView = {
+    private let tableBackgroundView: View = {
         let view = View(backgroundColor: .white)
         view.isHidden = true
         return view

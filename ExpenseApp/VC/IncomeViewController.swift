@@ -1,13 +1,12 @@
 import UIKit
 
 class IncomeViewController: UIViewController {
-    
     private let incomeType: [IncomeCategory] = [
         IncomeCategory(icon: "salary", label: "Salary"),
         IncomeCategory(icon: "freelance", label: "Freelance"),
         IncomeCategory(icon: "other", label: "Others"),
     ]
-    private let incomeLabelView: UIView = {
+    private let incomeLabelView: View = {
         let v = View(backgroundColor: .customPurple, cornerRadius: 25)
         v.layer.borderWidth = 2
         v.layer.borderColor = UIColor.white.cgColor
@@ -33,7 +32,7 @@ class IncomeViewController: UIViewController {
         view.addGestureRecognizer(tap)
         return view
     }()
-    private let tableBackgroundView: UIView = {
+    private let tableBackgroundView: View = {
         let view = View(backgroundColor: .white)
         view.isHidden = true
         return view
