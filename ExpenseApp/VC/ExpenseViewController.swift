@@ -56,12 +56,12 @@ class ExpenseViewController: UIViewController {
         tv.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.reuseIdentifier)
         return tv
     }()
-    private lazy var explainationTF: UITextField = {
+    private lazy var explainationTF: TextField = {
         let tf = TextField(font: .systemFont(ofSize: 15), placeholder: "Description", cornerRadius: 25)
         tf.addTarget(self, action: #selector(validateFields), for: .editingChanged)
         return tf
     }()
-    private lazy var addButton: UIButton = {
+    private lazy var addButton: Button = {
         let btn = Button(title: "ADD", backgroundColor: .customRed, cornerRadius: 25)
         btn.isEnabled = false
         btn.alpha = 0.5

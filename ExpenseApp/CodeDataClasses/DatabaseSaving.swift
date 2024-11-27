@@ -103,36 +103,6 @@ class DatabaseHandling {
             return nil
         }
     }
-    
-    func deleteAllIncome() {
-        guard let app = UIApplication.shared.delegate as? AppDelegate else { return }
-        let context = app.persistentContainer.viewContext
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Income.fetchRequest()
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        
-        do {
-            try context.execute(deleteRequest)
-            try context.save()
-            print("All Income Data has been deleted")
-        } catch {
-            print("Error occurred during deleting all Income Data")
-        }
-    }
-    
-    func deleteAllExpense() {
-        guard let app = UIApplication.shared.delegate as? AppDelegate else { return }
-        let context = app.persistentContainer.viewContext
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = Expense.fetchRequest()
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        
-        do {
-            try context.execute(deleteRequest)
-            try context.save()
-            print("All Expense Data has been deleted")
-        } catch {
-            print("Error occurred during deleting all Expense Data")
-        }
-    }
 }
 
 
