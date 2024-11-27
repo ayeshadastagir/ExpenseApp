@@ -240,7 +240,7 @@ class ExpenseViewController: UIViewController {
         } else {
             let alert = UIAlertController(
                 title: "Cannot Add Expense",
-                message: "You need to add income first or your expenses exceed your total income.",
+                message: "No Income or Expense amount exceeds wallet.",
                 preferredStyle: .alert
             )
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
