@@ -20,13 +20,13 @@ class ExpenseViewController: UIViewController {
     }()
     private let expenseLabel = Label(text: "Expense", textColor: .white, font: .systemFont(ofSize: 25, weight: .bold))
     private let howMuchLabel = Label(text: "How much?", textColor: .white.withAlphaComponent(0.5), font: .systemFont(ofSize: 20, weight: .semibold))
-    private lazy var enterAmountTF: UITextField = {
+    private lazy var enterAmountTF: TextField = {
         let tf = TextField(textColor: .white, font: .systemFont(ofSize: 50, weight: .bold), placeholder: "Enter Amount")
         tf.layer.borderWidth = 0
         tf.isEnabled = true
         tf.textAlignment = .left
         tf.keyboardType = .numberPad
-        tf.addTarget(self, action: #selector(validateFields), for: .editingChanged)
+        tf.addTarget(self, action: #selector(validateAndDatafetching), for: .editingChanged)
         return tf
     }()
     private let expenseDetailView = View(cornerRadius: 30)
@@ -184,6 +184,32 @@ class ExpenseViewController: UIViewController {
             addButton.isEnabled = false
             addButton.alpha = 0.5
         }
+    }
+    
+    @objc private func validateAndDatafetching() {
+        let dbFetching = DatabaseHandling()
+        var totalExpense: Int = 0
+        if let expenseRecords = dbFetching?.fetchExpense() {
+            expenseRecords.forEach {
+                if let amount = Int($0.amount) { totalExpense += amount }
+            }
+        } else {
+            print("No expense records found.")
+        }
+        var totalIncome: Int = 0
+        if let incomeRecords = dbFetching?.fetchIncome() {
+            incomeRecords.forEach {
+                if let amount = Int($0.amount) { totalIncome += amount }
+            }
+        } else {
+            print("No income records found.")
+        }
+        let balance = totalIncome - totalExpense
+        let amt = Int(enterAmountTF.text ?? "0" )
+        if amt ?? 0 > balance {
+            enterAmountTF.shake()
+        }
+        validateFields()
     }
     
     private func setDefaultValue() {
