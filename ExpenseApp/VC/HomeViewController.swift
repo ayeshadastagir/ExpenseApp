@@ -96,27 +96,25 @@ class HomeViewController: UIViewController {
         var expenseRecords: [FinancialRecord] = []
         
         if let incomeRecordsData = dbFetching?.fetchIncome() {
-            incomeRecords = incomeRecordsData.map { incomeData in
-                let image = UIImage(data: incomeData.image) ?? UIImage(named: "logo")!
+            incomeRecords = incomeRecordsData.map {
                 return IncomeRecord(
-                    amount: incomeData.amount,
-                    category: incomeData.category,
-                    explanation: incomeData.explanation,
-                    image: image,
-                    date: incomeData.date
+                    amount: $0.amount,
+                    category: $0.category,
+                    explanation: $0.explanation,
+                    image: UIImage(data: $0.image) ?? UIImage(named: "logo")!,
+                    date: $0.date
                 )
             }.map { .income($0) }
         }
         
         if let fetchedExpenseData = dbFetching?.fetchExpense() {
-            expenseRecords = fetchedExpenseData.map { expenseData in
-                let image = UIImage(data: expenseData.image) ?? UIImage(named: "logo")!
+            expenseRecords = fetchedExpenseData.map {
                 return ExpenseRecord(
-                    amount: expenseData.amount,
-                    category: expenseData.category,
-                    explanation: expenseData.explanation,
-                    image: image,
-                    date: expenseData.date
+                    amount: $0.amount,
+                    category: $0.category,
+                    explanation: $0.explanation,
+                    image: UIImage(data: $0.image) ?? UIImage(named: "logo")!,
+                    date: $0.date
                 )
             }.map { .expense($0) }
         }

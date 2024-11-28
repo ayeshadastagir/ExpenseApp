@@ -14,7 +14,7 @@ class IncomeViewController: UIViewController {
     }()
     private let incomeLabel = Label(text: "Income", textColor: .white, font: .systemFont(ofSize: 25.autoSized, weight: .bold))
     private let howMuchLabel = Label(text: "How much?", textColor: .white.withAlphaComponent(0.5), font: .systemFont(ofSize: 20.autoSized, weight: .semibold))
-    private lazy var enterAmountTF: UITextField = {
+    private lazy var enterAmountTF: TextField = {
         let tf = TextField(textColor: .white, font: .systemFont(ofSize: 50.autoSized, weight: .bold), placeholder: "Enter Amount")
         tf.layer.borderWidth = 0
         tf.isEnabled = true

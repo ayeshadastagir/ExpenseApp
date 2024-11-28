@@ -14,7 +14,16 @@ class TransactionTableViewCell: TableViewCell {
     private let descriptionLabel = Label(text: "",textColor: .systemGray, font: .systemFont(ofSize: 15))
     private let amountLabel = Label(text: "", font: .systemFont(ofSize: 15, weight: .semibold))
     private let dateTimeLabel = Label(text: "", textColor: .systemGray, font:.systemFont(ofSize: 13))
-    
+    private lazy var editButton: Button = {
+        let btn = Button(image: "edit", cornerRadius: 5.autoSized)
+        return btn
+    }()
+    private lazy var deleteButton: Button = {
+        let btn = Button(image: "delete", cornerRadius: 5.autoSized)
+        btn.addTarget(self, action: #selector(deleteTapped), for: .touchUpInside)
+        return btn
+    }()
+    var deleteClosure: (() -> Void)?
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -31,6 +40,8 @@ class TransactionTableViewCell: TableViewCell {
         contentBackgroundView.addSubview(descriptionLabel)
         contentBackgroundView.addSubview(amountLabel)
         contentBackgroundView.addSubview(dateTimeLabel)
+        contentBackgroundView.addSubview(editButton)
+        contentBackgroundView.addSubview(deleteButton)
         
         NSLayoutConstraint.activate([
             contentBackgroundView.topAnchor.constraint(equalTo: self.topAnchor),
@@ -51,11 +62,21 @@ class TransactionTableViewCell: TableViewCell {
             descriptionLabel.bottomAnchor.constraint(equalTo: contentBackgroundView.bottomAnchor, constant: -20.autoSized),
             descriptionLabel.widthAnchor.constraint(equalToConstant: 80.widthRatio),
             
-            amountLabel.topAnchor.constraint(equalTo: categoryIcon.topAnchor, constant: 5.autoSized),
-            amountLabel.trailingAnchor.constraint(equalTo: contentBackgroundView.trailingAnchor, constant: -30.widthRatio),
+            editButton.topAnchor.constraint(equalTo: categoryIcon.topAnchor),
+            editButton.trailingAnchor.constraint(equalTo: contentBackgroundView.trailingAnchor, constant: -30.widthRatio),
+            editButton.heightAnchor.constraint(equalToConstant: 25.autoSized),
+            editButton.widthAnchor.constraint(equalToConstant: 25.widthRatio),
+
+            deleteButton.trailingAnchor.constraint(equalTo: contentBackgroundView.trailingAnchor, constant: -30.widthRatio),
+            deleteButton.heightAnchor.constraint(equalToConstant: 25.autoSized),
+            deleteButton.widthAnchor.constraint(equalToConstant: 25.widthRatio),
+            deleteButton.bottomAnchor.constraint(equalTo: categoryIcon.bottomAnchor),
             
-            dateTimeLabel.topAnchor.constraint(equalTo: amountLabel.bottomAnchor, constant: 12.autoSized),
-            dateTimeLabel.trailingAnchor.constraint(equalTo: contentBackgroundView.trailingAnchor, constant: -30.widthRatio),
+            amountLabel.topAnchor.constraint(equalTo: categoryIcon.topAnchor, constant: 5.autoSized),
+            amountLabel.trailingAnchor.constraint(equalTo: deleteButton.leadingAnchor, constant: -5.widthRatio),
+            
+            dateTimeLabel.topAnchor.constraint(equalTo: deleteButton.topAnchor, constant: 5.autoSized),
+            dateTimeLabel.trailingAnchor.constraint(equalTo: deleteButton.leadingAnchor, constant: -5.widthRatio),
         ])
     }
     
@@ -66,5 +87,9 @@ class TransactionTableViewCell: TableViewCell {
         amountLabel.textColor = color
         categoryIcon.image = icon
         dateTimeLabel.text = date
+    }
+    
+    @objc private func deleteTapped() {
+        deleteClosure?()
     }
 }
