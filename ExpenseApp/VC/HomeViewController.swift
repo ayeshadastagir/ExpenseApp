@@ -121,7 +121,7 @@ class HomeViewController: UIViewController {
             }.map { .expense($0) }
         }
         
-        let allRecords = incomeRecords + expenseRecords 
+        let allRecords = incomeRecords + expenseRecords
         let sortedRecords = allRecords.sorted { $0.date > $1.date }
         financialRecords = Array(sortedRecords.prefix(5))
         
@@ -136,32 +136,58 @@ class HomeViewController: UIViewController {
     }
     
     private func deleteRecord(id: UUID) {
-            let dbHandling = DatabaseHandling()
-          
-            let record = financialRecords.first { record in
-                switch record {
-                case .income(let incomeRecord):
-                    return incomeRecord.id == id
-                case .expense(let expenseRecord):
-                    return expenseRecord.id == id
-                }
-            }
-            
-            guard let record = record else {
-                print("Record not found")
-                return
-            }
-            
+        let dbHandling = DatabaseHandling()
+        let record = financialRecords.first { record in
             switch record {
-            case .income:
-                dbHandling?.deleteRecord(type: Income.self, id: id)
-            case .expense:
-                dbHandling?.deleteRecord(type: Expense.self, id: id)
+            case .income(let incomeRecord):
+                return incomeRecord.id == id
+            case .expense(let expenseRecord):
+                return expenseRecord.id == id
             }
-            fetchData()
-            updateAmounts()
-            transactionsTableView.reloadData()
         }
+        guard let record = record else {
+            print("Record not found")
+            return
+        }
+        switch record {
+        case .income:
+            dbHandling?.deleteRecord(type: Income.self, id: id)
+        case .expense:
+            dbHandling?.deleteRecord(type: Expense.self, id: id)
+        }
+        fetchData()
+        updateAmounts()
+        transactionsTableView.reloadData()
+    }
+    
+    private func selectType(id: UUID, type: String) {
+        let alertController = UIAlertController(
+            title: "Update Record",
+            message: "Choose the type of record you want to update",
+            preferredStyle: .actionSheet
+        )
+        if type == "Income" {
+            let incomeAction = UIAlertAction(title: "Income", style: .default) { [weak self] _ in
+                let incomeUpdateVC = IncomeUpdateViewController(recordId: id)
+                incomeUpdateVC.modalTransitionStyle = .crossDissolve
+                incomeUpdateVC.modalPresentationStyle = .fullScreen
+                self?.present(incomeUpdateVC, animated: true, completion: nil)
+            }
+            alertController.addAction(incomeAction)
+        }
+        
+        if type == "Expense" {
+            let expenseAction = UIAlertAction(title: "Expense", style: .default) { [weak self] _ in
+                let expenseUpdateVC = ExpenseUpdateViewController(recordId: id)
+                expenseUpdateVC.modalTransitionStyle = .crossDissolve
+                expenseUpdateVC.modalPresentationStyle = .fullScreen
+                self?.present(expenseUpdateVC, animated: true, completion: nil)
+            }
+            alertController.addAction(expenseAction)
+        }
+        present(alertController, animated: true)
+    }
+
 }
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
@@ -187,6 +213,9 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
                 cell.deleteClosure = { [weak self] in
                     self?.deleteRecord(id: incomeRecord.id)
                 }
+                cell.updateClosure = { [weak self] in
+                    self?.selectType(id: incomeRecord.id, type: "Income")
+                }
             } else {
                 print("Failed to convert Data to UIImage")
             }
@@ -203,6 +232,9 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
                 )
                 cell.deleteClosure = { [weak self] in
                     self?.deleteRecord(id: expenseRecord.id)
+                }
+                cell.updateClosure = { [weak self] in
+                    self?.selectType(id: expenseRecord.id, type: "Expense")
                 }
             } else {
                 print("Failed to convert Data to UIImage")

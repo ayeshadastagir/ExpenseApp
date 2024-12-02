@@ -1,6 +1,9 @@
+
 import UIKit
 
-class ExpenseViewController: UIViewController {
+class ExpenseUpdateViewController: UIViewController {
+    private let recordId: UUID
+    private var existingExpenseData: ExpenseData?
     private let expenseType: [ExpenseCategory] = [
         ExpenseCategory(icon: "bill", label: "Bills"),
         ExpenseCategory(icon: "food", label: "Food"),
@@ -18,7 +21,7 @@ class ExpenseViewController: UIViewController {
         v.layer.borderColor = UIColor.white.cgColor
         return v
     }()
-    private let expenseLabel = Label(text: "Expense", textColor: .white, font: .systemFont(ofSize: 25, weight: .bold))
+    private let expenseLabel = Label(text: "Expense", textColor: .white, font: .systemFont(ofSize: 25.autoSized, weight: .bold))
     private let howMuchLabel = Label(text: "How much?", textColor: .white.withAlphaComponent(0.5), font: .systemFont(ofSize: 20.autoSized, weight: .semibold))
     private lazy var enterAmountTF: TextField = {
         let tf = TextField(textColor: .white, font: .systemFont(ofSize: 50.autoSized, weight: .bold), placeholder: "Enter Amount")
@@ -34,7 +37,8 @@ class ExpenseViewController: UIViewController {
         let view = CategoryView()
         view.layer.borderColor = UIColor.systemGray4.cgColor
         view.layer.borderWidth = 1.autoSized
-        let tap = UITapGestureRecognizer(target: self, action: #selector(selectExpense(_:)))
+        view.selectedCategoryLabel.textColor = .black
+        let tap = UITapGestureRecognizer(target: self, action: #selector(selectIncome(_:)))
         view.addGestureRecognizer(tap)
         return view
     }()
@@ -49,8 +53,8 @@ class ExpenseViewController: UIViewController {
         tv.delegate = self
         tv.separatorStyle = .none
         tv.allowsSelection = false
-        tv.showsVerticalScrollIndicator = false
         tv.clipsToBounds = true
+        tv.showsVerticalScrollIndicator = false
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.reuseIdentifier)
         return tv
@@ -60,16 +64,25 @@ class ExpenseViewController: UIViewController {
         tf.addTarget(self, action: #selector(validateFields), for: .editingChanged)
         return tf
     }()
-    private lazy var addButton: Button = {
-        let btn = Button(title: "ADD", backgroundColor: .customRed, cornerRadius: 25.autoSized)
+    private lazy var updateButton: Button = {
+        let btn = Button(title: "UPDATE", backgroundColor: .customRed, cornerRadius: 25.autoSized)
         btn.isEnabled = false
         btn.alpha = 0.5
-        btn.addTarget(self, action: #selector(dataSaved), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(dataUpdated), for: .touchUpInside)
         return btn
     }()
     var categoryViewHeight: NSLayoutConstraint!
     var tableBackgroundViewTop: NSLayoutConstraint!
     var tableViewTop: NSLayoutConstraint!
+    
+    init(recordId: UUID) {
+        self.recordId = recordId
+        super.init(nibName: nil, bundle: nil)
+        fetchExistingRecord()
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,7 +100,7 @@ class ExpenseViewController: UIViewController {
         selectCategoryView.addSubview(tableBackgroundView)
         tableBackgroundView.addSubview(tableView)
         expenseDetailView.addSubview(explainationTF)
-        expenseDetailView.addSubview(addButton)
+        expenseDetailView.addSubview(updateButton)
         
         NSLayoutConstraint.activate([
             expenseLabelView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0.autoSized),
@@ -111,7 +124,7 @@ class ExpenseViewController: UIViewController {
             expenseDetailView.topAnchor.constraint(equalTo: enterAmountTF.bottomAnchor, constant: 100.autoSized),
             expenseDetailView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             expenseDetailView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            expenseDetailView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 30),
+            expenseDetailView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 30.autoSized),
             
             selectCategoryView.topAnchor.constraint(equalTo: expenseDetailView.topAnchor, constant: 40.autoSized),
             selectCategoryView.leadingAnchor.constraint(equalTo: expenseDetailView.leadingAnchor, constant: 25.widthRatio),
@@ -130,16 +143,35 @@ class ExpenseViewController: UIViewController {
             explainationTF.trailingAnchor.constraint(equalTo: expenseDetailView.trailingAnchor, constant: -25.widthRatio),
             explainationTF.heightAnchor.constraint(equalToConstant: 60.autoSized),
             
-            addButton.heightAnchor.constraint(equalToConstant: 60.autoSized),
-            addButton.leadingAnchor.constraint(equalTo: expenseDetailView.leadingAnchor, constant: 25.widthRatio),
-            addButton.trailingAnchor.constraint(equalTo: expenseDetailView.trailingAnchor, constant: -25.widthRatio),
-            addButton.bottomAnchor.constraint(equalTo: expenseDetailView.bottomAnchor, constant: -150.autoSized),
-            
+            updateButton.heightAnchor.constraint(equalToConstant: 60.autoSized),
+            updateButton.leadingAnchor.constraint(equalTo: expenseDetailView.leadingAnchor, constant: 25.widthRatio),
+            updateButton.trailingAnchor.constraint(equalTo: expenseDetailView.trailingAnchor, constant: -25.widthRatio),
+            updateButton.bottomAnchor.constraint(equalTo: expenseDetailView.bottomAnchor, constant: -150.autoSized),
         ])
         categoryViewHeight = selectCategoryView.heightAnchor.constraint(equalToConstant: 60.autoSized)
         categoryViewHeight.isActive = true
         tableBackgroundViewTop = tableBackgroundView.topAnchor.constraint(equalTo: selectCategoryView.logo.bottomAnchor, constant: 5.autoSized)
         tableViewTop = tableView.topAnchor.constraint(equalTo: tableBackgroundView.topAnchor, constant: 10.autoSized)
+    }
+  
+    private func fetchExistingRecord() {
+        let dbHandler = DatabaseHandling()
+        existingExpenseData = dbHandler?.fetchSpecificExpense(id: recordId)
+        DispatchQueue.main.async {
+            self.populateFields()
+        }
+    }
+    
+    private func populateFields() {
+        guard let expenseData = existingExpenseData else { return }
+        
+        enterAmountTF.text = expenseData.amount
+        explainationTF.text = expenseData.explanation
+        selectCategoryView.didUpdateCategory(
+            name: expenseData.category,
+            img: UIImage(data: expenseData.image)!
+        )
+        validateFields()
     }
     
     private func resetUI() {
@@ -149,48 +181,24 @@ class ExpenseViewController: UIViewController {
         categoryViewHeight = selectCategoryView.heightAnchor.constraint(equalToConstant: 60.autoSized)
         categoryViewHeight.isActive = true
         selectCategoryView.selectedCategoryLabel.textColor = .black
-        addButton.isHidden = false
+        updateButton.isHidden = false
         
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }
     }
-    
-    private func setDefaultValue() {
-        enterAmountTF.text = ""
-        explainationTF.text = ""
-        selectCategoryView.selectedCategoryLabel.text = "Category"
-        selectCategoryView.logo.image = UIImage(named: "category")
-        selectCategoryView.selectedCategoryLabel.textColor = .systemGray3
-    }
-    
-    @objc func selectExpense(_ sender: UITapGestureRecognizer? = nil) {
-        categoryViewHeight.isActive = false
-        categoryViewHeight = selectCategoryView.heightAnchor.constraint(equalToConstant: 250.autoSized)
-        categoryViewHeight.isActive = true
-        
-        tableBackgroundView.isHidden = false
-        tableBackgroundViewTop.isActive = true
-        tableViewTop.isActive = true
-        addButton.isHidden = true
-        
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
-        }
-        validateFields()
-    }
-    
     
     @objc private func validateFields() {
-        let isAmountAdded = !(enterAmountTF.text?.isEmpty ?? true)
+        let isAmountFilled = !(enterAmountTF.text?.isEmpty ?? true)
         let isCategorySelected = selectCategoryView.selectedCategoryLabel.text != "Category"
         let isDescriptionFilled = !(explainationTF.text?.isEmpty ?? true)
-        if isAmountAdded && isCategorySelected && isDescriptionFilled {
-            addButton.isEnabled = true
-            addButton.alpha = 1.0
+        
+        if isAmountFilled && isCategorySelected && isDescriptionFilled {
+            updateButton.isEnabled = true
+            updateButton.alpha = 1.0
         } else {
-            addButton.isEnabled = false
-            addButton.alpha = 0.5
+            updateButton.isEnabled = false
+            updateButton.alpha = 0.5
         }
     }
     
@@ -219,41 +227,57 @@ class ExpenseViewController: UIViewController {
         }
         validateFields()
     }
-
-    @objc private func dataSaved() {
+    
+    @objc private func dataUpdated() {
         let dataHandler = DatabaseHandling()
         let selectedImage = selectCategoryView.logo.image
         let selectedImageData = selectedImage!.pngData()!
-        let expense = ExpenseData(
+        
+        let updatedExpense = ExpenseData(
             amount: enterAmountTF.text!,
             category: selectCategoryView.selectedCategoryLabel.text!,
             explanation: explainationTF.text!,
             image: selectedImageData,
-            date: Date(),
-            id: UUID()
-        )
-        if dataHandler?.saveExpense(expenseData: expense) == true {
-            setDefaultValue()
-            let homeScreen = CustomTabBarController()
-            homeScreen.modalTransitionStyle = .crossDissolve
-            homeScreen.modalPresentationStyle = .fullScreen
+            date: existingExpenseData?.date ?? Date(),
+            id: recordId )
+        
+        let homeScreen = CustomTabBarController()
+        homeScreen.modalTransitionStyle = .crossDissolve
+        homeScreen.modalPresentationStyle = .fullScreen
+        
+        if dataHandler?.updateExpense(id: recordId, updatedExpenseData: updatedExpense) == true {
             self.present(homeScreen, animated: true, completion: nil)
         } else {
             let alert = UIAlertController(
-                title: "Cannot Add Expense",
-                message: "No Income or Expense amount exceeds wallet.",
+                title: "Update Failed",
+                message: "Unable to update expense record.",
                 preferredStyle: .alert
             )
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+                self.present(homeScreen, animated: true, completion: nil)
+            }))
             present(alert, animated: true, completion: nil)
-            setDefaultValue()
-
         }
+    }
+    
+    @objc func selectIncome(_ sender: UITapGestureRecognizer? = nil) {
+        categoryViewHeight.isActive = false
+        categoryViewHeight = selectCategoryView.heightAnchor.constraint(equalToConstant: 250.autoSized)
+        categoryViewHeight.isActive = true
+        
+        tableBackgroundView.isHidden = false
+        tableBackgroundViewTop.isActive = true
+        tableViewTop.isActive = true
+        updateButton.isHidden = true
+        
+        UIView.animate(withDuration: 0.3) {
+            self.view.layoutIfNeeded()
+        }
+        validateFields()
     }
 }
 
-extension ExpenseViewController: UITableViewDataSource, UITableViewDelegate {
-    
+extension ExpenseUpdateViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return expenseType.count
     }

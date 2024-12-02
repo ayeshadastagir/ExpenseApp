@@ -16,7 +16,7 @@ class TransactionTableViewCell: TableViewCell {
     private let dateTimeLabel = Label(text: "", textColor: .systemGray, font:.systemFont(ofSize: 13.autoSized))
     private lazy var editButton: Button = {
         let btn = Button(image: "edit", cornerRadius: 5.autoSized)
-//        btn.addTarget(self, action: #selector(updateCell), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(updateTapped), for: .touchUpInside)
         return btn
     }()
     private lazy var deleteButton: Button = {
@@ -25,6 +25,8 @@ class TransactionTableViewCell: TableViewCell {
         return btn
     }()
     var deleteClosure: (() -> Void)?
+    var updateClosure: (() -> Void)?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -93,5 +95,9 @@ class TransactionTableViewCell: TableViewCell {
     
     @objc private func deleteTapped() {
         deleteClosure?()
+    }
+    
+    @objc private func updateTapped() {
+        updateClosure?()
     }
 }

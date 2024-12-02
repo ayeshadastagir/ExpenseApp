@@ -20,6 +20,8 @@
 		7B6131302CEC79E90063AF5B /* FinancialRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B61312F2CEC79E90063AF5B /* FinancialRecordExtension.swift */; };
 		7B6131322CEC7A680063AF5B /* financialRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6131312CEC7A680063AF5B /* financialRecord.swift */; };
 		7B9C99402CE4735E00BFF031 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9C993F2CE4735E00BFF031 /* CustomTableViewCell.swift */; };
+		7BA143622CFD8D0800684E94 /* IncomeUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA143612CFD8D0800684E94 /* IncomeUpdateViewController.swift */; };
+		7BA143642CFD8F5000684E94 /* ExpenseUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA143632CFD8F5000684E94 /* ExpenseUpdateViewController.swift */; };
 		7BE039612CE31D5200AB5170 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE039602CE31D5200AB5170 /* AppDelegate.swift */; };
 		7BE039632CE31D5200AB5170 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE039622CE31D5200AB5170 /* SceneDelegate.swift */; };
 		7BE039652CE31D5200AB5170 /* SplashScreenController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE039642CE31D5200AB5170 /* SplashScreenController.swift */; };
@@ -74,6 +76,8 @@
 		7B61312F2CEC79E90063AF5B /* FinancialRecordExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancialRecordExtension.swift; sourceTree = "<group>"; };
 		7B6131312CEC7A680063AF5B /* financialRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = financialRecord.swift; sourceTree = "<group>"; };
 		7B9C993F2CE4735E00BFF031 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
+		7BA143612CFD8D0800684E94 /* IncomeUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeUpdateViewController.swift; sourceTree = "<group>"; };
+		7BA143632CFD8F5000684E94 /* ExpenseUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseUpdateViewController.swift; sourceTree = "<group>"; };
 		7BE0395D2CE31D5200AB5170 /* ExpenseApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExpenseApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BE039602CE31D5200AB5170 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7BE039622CE31D5200AB5170 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -145,6 +149,8 @@
 				7BE039A42CE322C600AB5170 /* TransactionViewController.swift */,
 				7BE039A62CE322DA00AB5170 /* ExpenseViewController.swift */,
 				7BE039A82CE322F100AB5170 /* IncomeViewController.swift */,
+				7BA143612CFD8D0800684E94 /* IncomeUpdateViewController.swift */,
+				7BA143632CFD8F5000684E94 /* ExpenseUpdateViewController.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -397,6 +403,7 @@
 			files = (
 				7B61312E2CEC6D7E0063AF5B /* DateExtension.swift in Sources */,
 				7BE039972CE321B000AB5170 /* Button.swift in Sources */,
+				7BA143642CFD8F5000684E94 /* ExpenseUpdateViewController.swift in Sources */,
 				7BE0399F2CE321EF00AB5170 /* Image.swift in Sources */,
 				7B9C99402CE4735E00BFF031 /* CustomTableViewCell.swift in Sources */,
 				7BE039A12CE3226600AB5170 /* CustomTabBarController.swift in Sources */,
@@ -410,6 +417,7 @@
 				7BE039A52CE322C600AB5170 /* TransactionViewController.swift in Sources */,
 				7BE039B72CE3285300AB5170 /* DatabaseSaving.swift in Sources */,
 				7B11B3FC2CEB123600C99BA1 /* TransactionTableViewCell.swift in Sources */,
+				7BA143622CFD8D0800684E94 /* IncomeUpdateViewController.swift in Sources */,
 				7BE039A32CE322AB00AB5170 /* HomeViewController.swift in Sources */,
 				7BE039612CE31D5200AB5170 /* AppDelegate.swift in Sources */,
 				7B61312A2CEC675A0063AF5B /* Expense+CoreDataClass.swift in Sources */,

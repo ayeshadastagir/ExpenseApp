@@ -1,6 +1,9 @@
+
 import UIKit
 
-class IncomeViewController: UIViewController {
+class IncomeUpdateViewController: UIViewController {
+    private let recordId: UUID
+    private var existingIncomeData: IncomeData?
     private let incomeType: [IncomeCategory] = [
         IncomeCategory(icon: "salary", label: "Salary"),
         IncomeCategory(icon: "freelance", label: "Freelance"),
@@ -54,22 +57,31 @@ class IncomeViewController: UIViewController {
         tf.addTarget(self, action: #selector(validateFields), for: .editingChanged)
         return tf
     }()
-    private lazy var addButton: Button = {
-        let btn = Button(title: "ADD", backgroundColor: .customGreen, cornerRadius: 25.autoSized)
+    private lazy var updateButton: Button = {
+        let btn = Button(title: "UPDATE", backgroundColor: .customGreen, cornerRadius: 25.autoSized)
         btn.isEnabled = false
         btn.alpha = 0.5
-        btn.addTarget(self, action: #selector(dataSaved), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(dataUpdated), for: .touchUpInside)
         return btn
     }()
     var categoryViewHeight: NSLayoutConstraint!
     var tableBackgroundViewTop: NSLayoutConstraint!
     var tableViewTop: NSLayoutConstraint!
     
+    init(recordId: UUID) {
+        self.recordId = recordId
+        super.init(nibName: nil, bundle: nil)
+        fetchExistingRecord()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .customGreen
         setupUI()
-        validateFields()
     }
     
     private func setupUI() {
@@ -82,7 +94,7 @@ class IncomeViewController: UIViewController {
         selectCategoryView.addSubview(tableBackgroundView)
         tableBackgroundView.addSubview(tableView)
         incomeDetailView.addSubview(explainationTF)
-        incomeDetailView.addSubview(addButton)
+        incomeDetailView.addSubview(updateButton)
         
         NSLayoutConstraint.activate([
             incomeLabelView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0.autoSized),
@@ -125,17 +137,36 @@ class IncomeViewController: UIViewController {
             explainationTF.trailingAnchor.constraint(equalTo: incomeDetailView.trailingAnchor, constant: -25.widthRatio),
             explainationTF.heightAnchor.constraint(equalToConstant: 60.autoSized),
             
-            addButton.heightAnchor.constraint(equalToConstant: 60.autoSized),
-            addButton.leadingAnchor.constraint(equalTo: incomeDetailView.leadingAnchor, constant: 25.widthRatio),
-            addButton.trailingAnchor.constraint(equalTo: incomeDetailView.trailingAnchor, constant: -25.widthRatio),
-            addButton.bottomAnchor.constraint(equalTo: incomeDetailView.bottomAnchor, constant: -150.autoSized),
+            updateButton.heightAnchor.constraint(equalToConstant: 60.autoSized),
+            updateButton.leadingAnchor.constraint(equalTo: incomeDetailView.leadingAnchor, constant: 25.widthRatio),
+            updateButton.trailingAnchor.constraint(equalTo: incomeDetailView.trailingAnchor, constant: -25.widthRatio),
+            updateButton.bottomAnchor.constraint(equalTo: incomeDetailView.bottomAnchor, constant: -150.autoSized),
         ])
         categoryViewHeight = selectCategoryView.heightAnchor.constraint(equalToConstant: 60.autoSized)
         categoryViewHeight.isActive = true
         tableBackgroundViewTop = tableBackgroundView.topAnchor.constraint(equalTo: selectCategoryView.logo.bottomAnchor, constant: 5.autoSized)
         tableViewTop = tableView.topAnchor.constraint(equalTo: tableBackgroundView.topAnchor, constant: 10.autoSized)
     }
- 
+    
+    private func fetchExistingRecord() {
+        let dbHandler = DatabaseHandling()
+        existingIncomeData = dbHandler?.fetchSpecificIncome(id: recordId)
+        DispatchQueue.main.async {
+            self.populateFields()
+        }
+    }
+    
+    private func populateFields() {
+        guard let incomeData = existingIncomeData else { return }
+        enterAmountTF.text = incomeData.amount
+        explainationTF.text = incomeData.explanation
+        selectCategoryView.didUpdateCategory(
+            name: incomeData.category,
+            img:  UIImage(data: incomeData.image)!
+        )
+        validateFields()
+    }
+    
     private func resetUI() {
         categoryViewHeight.isActive = false
         tableViewTop.isActive = false
@@ -143,38 +174,53 @@ class IncomeViewController: UIViewController {
         categoryViewHeight = selectCategoryView.heightAnchor.constraint(equalToConstant: 60.autoSized)
         categoryViewHeight.isActive = true
         selectCategoryView.selectedCategoryLabel.textColor = .black
-        addButton.isHidden = false
+        updateButton.isHidden = false
         
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }
     }
     
-    private func setDefaultValue() {
-        enterAmountTF.text = ""
-        explainationTF.text = ""
-        selectCategoryView.selectedCategoryLabel.text = "Category"
-        selectCategoryView.selectedCategoryLabel.textColor = .systemGray3
-    }
+    @objc private func validateFields() {
+        let isAmountFilled = !(enterAmountTF.text?.isEmpty ?? true)
+        let isCategorySelected = selectCategoryView.selectedCategoryLabel.text != "Category"
+        let isDescriptionFilled = !(explainationTF.text?.isEmpty ?? true)
         
-    @objc private func dataSaved() {
+        if isAmountFilled && isCategorySelected && isDescriptionFilled  {
+            updateButton.isEnabled = true
+            updateButton.alpha = 1.0
+        } else {
+            updateButton.isEnabled = false
+            updateButton.alpha = 0.5
+        }
+    }
+    
+    @objc private func dataUpdated() {
         let dataHandler = DatabaseHandling()
         let selectedImage = selectCategoryView.logo.image
         let selectedImageData = selectedImage!.pngData()!
-        let income = IncomeData(
+        
+        let updatedIncome = IncomeData(
             amount: enterAmountTF.text!,
             category: selectCategoryView.selectedCategoryLabel.text!,
             explanation: explainationTF.text!,
             image: selectedImageData,
-            date: Date(),
-            id: UUID()
-        )
-        dataHandler?.saveIncome(incomeData: income)
-        setDefaultValue()
-        let homeScreen = CustomTabBarController()
-        homeScreen.modalTransitionStyle = .crossDissolve
-        homeScreen.modalPresentationStyle = .fullScreen
-        self.present(homeScreen, animated: true, completion: nil)
+            date: existingIncomeData?.date ?? Date(),
+            id: recordId )
+        if dataHandler?.updateIncome(id: recordId, updatedIncomeData: updatedIncome) == true {
+            let homeScreen = CustomTabBarController()
+            homeScreen.modalTransitionStyle = .crossDissolve
+            homeScreen.modalPresentationStyle = .fullScreen
+            self.present(homeScreen, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(
+                title: "Update Failed",
+                message: "Unable to update income record.",
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true, completion: nil)
+        }
     }
     
     @objc func selectIncome(_ sender: UITapGestureRecognizer? = nil) {
@@ -185,41 +231,28 @@ class IncomeViewController: UIViewController {
         tableBackgroundView.isHidden = false
         tableBackgroundViewTop.isActive = true
         tableViewTop.isActive = true
-        addButton.isHidden = true
+        updateButton.isHidden = true
+        
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
         }
         validateFields()
     }
-    
-    @objc private func validateFields() {
-        let isAmountFilled = !(enterAmountTF.text?.isEmpty ?? true)
-        let isCategorySelected = selectCategoryView.selectedCategoryLabel.text != "Category"
-        let isDescriptionFilled = !(explainationTF.text?.isEmpty ?? true)
-        if isAmountFilled && isCategorySelected && isDescriptionFilled {
-            addButton.isEnabled = true
-            addButton.alpha = 1.0
-        } else {
-            addButton.isEnabled = false
-            addButton.alpha = 0.5
-        }
-    }
 }
 
-extension IncomeViewController: UITableViewDataSource, UITableViewDelegate {
-    
+extension IncomeUpdateViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return incomeType.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CustomTableViewCell.reuseIdentifier, for: indexPath) as! CustomTableViewCell
-        cell.selectCategoryType = { [weak self] selectedLabelText, img in
-            self?.selectCategoryView.didUpdateCategory(name: selectedLabelText ?? "", img: img!) 
-            self?.resetUI()
-        }
         let card = incomeType[indexPath.row]
         cell.configure(text: card.label, icon: UIImage(named: card.icon))
+        cell.selectCategoryType = { [weak self] selectedLabelText, img in
+            self?.selectCategoryView.didUpdateCategory(name: selectedLabelText ?? "", img: img!)
+            self?.resetUI()
+        }
         return cell
     }
 }
