@@ -97,29 +97,31 @@ class HomeViewController: UIViewController {
         
         if let incomeRecordsData = dbFetching?.fetchIncome() {
             incomeRecords = incomeRecordsData.map {
-                return IncomeRecord(
+                return IncomeData(
                     amount: $0.amount,
                     category: $0.category,
                     explanation: $0.explanation,
-                    image: UIImage(data: $0.image) ?? UIImage(named: "logo")!,
-                    date: $0.date
+                    image: $0.image,
+                    date: $0.date,
+                    id: $0.id
                 )
             }.map { .income($0) }
         }
         
         if let fetchedExpenseData = dbFetching?.fetchExpense() {
             expenseRecords = fetchedExpenseData.map {
-                return ExpenseRecord(
+                return ExpenseData(
                     amount: $0.amount,
                     category: $0.category,
                     explanation: $0.explanation,
-                    image: UIImage(data: $0.image) ?? UIImage(named: "logo")!,
-                    date: $0.date
+                    image: $0.image,
+                    date: $0.date,
+                    id: $0.id
                 )
             }.map { .expense($0) }
         }
         
-        let allRecords = incomeRecords + expenseRecords
+        let allRecords = incomeRecords + expenseRecords 
         let sortedRecords = allRecords.sorted { $0.date > $1.date }
         financialRecords = Array(sortedRecords.prefix(5))
         
@@ -132,6 +134,34 @@ class HomeViewController: UIViewController {
             transactionsTableView.isHidden = true
         }
     }
+    
+    private func deleteRecord(id: UUID) {
+            let dbHandling = DatabaseHandling()
+          
+            let record = financialRecords.first { record in
+                switch record {
+                case .income(let incomeRecord):
+                    return incomeRecord.id == id
+                case .expense(let expenseRecord):
+                    return expenseRecord.id == id
+                }
+            }
+            
+            guard let record = record else {
+                print("Record not found")
+                return
+            }
+            
+            switch record {
+            case .income:
+                dbHandling?.deleteRecord(type: Income.self, id: id)
+            case .expense:
+                dbHandling?.deleteRecord(type: Expense.self, id: id)
+            }
+            fetchData()
+            updateAmounts()
+            transactionsTableView.reloadData()
+        }
 }
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
@@ -145,24 +175,38 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         let record = financialRecords[indexPath.row]
         switch record {
         case .income(let incomeRecord):
-            cell.configure(
-                categoryLabelText: incomeRecord.category,
-                descriptionLabelText: incomeRecord.explanation,
-                amountLabelText: "+ $" + incomeRecord.amount,
-                icon: incomeRecord.image,
-                color: .customGreen,
-                date: incomeRecord.date.formattedString()
-            )
+            if let iconImage = UIImage(data: incomeRecord.image) {
+                cell.configure(
+                    categoryLabelText: incomeRecord.category,
+                    descriptionLabelText: incomeRecord.explanation,
+                    amountLabelText: "+ $" + incomeRecord.amount,
+                    icon: iconImage,
+                    color: .customGreen,
+                    date: incomeRecord.date.formattedString()
+                )
+                cell.deleteClosure = { [weak self] in
+                    self?.deleteRecord(id: incomeRecord.id)
+                }
+            } else {
+                print("Failed to convert Data to UIImage")
+            }
             return cell
         case .expense(let expenseRecord):
-            cell.configure(
-                categoryLabelText: expenseRecord.category,
-                descriptionLabelText: expenseRecord.explanation,
-                amountLabelText: "- $" + expenseRecord.amount,
-                icon: expenseRecord.image,
-                color: .customRed,
-                date: expenseRecord.date.formattedString()
-            )
+            if let iconImage = UIImage(data: expenseRecord.image) {
+                cell.configure(
+                    categoryLabelText: expenseRecord.category,
+                    descriptionLabelText: expenseRecord.explanation,
+                    amountLabelText: "- $" + expenseRecord.amount,
+                    icon: iconImage,
+                    color: .customRed,
+                    date: expenseRecord.date.formattedString()
+                )
+                cell.deleteClosure = { [weak self] in
+                    self?.deleteRecord(id: expenseRecord.id)
+                }
+            } else {
+                print("Failed to convert Data to UIImage")
+            }
             return cell
         }
     }

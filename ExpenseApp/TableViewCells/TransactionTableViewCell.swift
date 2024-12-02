@@ -8,14 +8,15 @@ class TableViewCell: UITableViewCell {
 
 class TransactionTableViewCell: TableViewCell {
 
-    private let contentBackgroundView = View(backgroundColor: .systemGray6, cornerRadius: 20)
+    private let contentBackgroundView = View(backgroundColor: .systemGray6, cornerRadius: 20.autoSized)
     private let categoryIcon = Image()
-    private let categoryLabel = Label(text: "",textColor: .black, font: .systemFont(ofSize: 15, weight: .semibold))
-    private let descriptionLabel = Label(text: "",textColor: .systemGray, font: .systemFont(ofSize: 15))
-    private let amountLabel = Label(text: "", font: .systemFont(ofSize: 15, weight: .semibold))
-    private let dateTimeLabel = Label(text: "", textColor: .systemGray, font:.systemFont(ofSize: 13))
+    private let categoryLabel = Label(text: "",textColor: .black, font: .systemFont(ofSize: 15.autoSized, weight: .semibold))
+    private let descriptionLabel = Label(text: "",textColor: .systemGray, font: .systemFont(ofSize: 15.autoSized))
+    private let amountLabel = Label(text: "", font: .systemFont(ofSize: 15.autoSized, weight: .semibold))
+    private let dateTimeLabel = Label(text: "", textColor: .systemGray, font:.systemFont(ofSize: 13.autoSized))
     private lazy var editButton: Button = {
         let btn = Button(image: "edit", cornerRadius: 5.autoSized)
+//        btn.addTarget(self, action: #selector(updateCell), for: .touchUpInside)
         return btn
     }()
     private lazy var deleteButton: Button = {
@@ -27,6 +28,7 @@ class TransactionTableViewCell: TableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
+        contentView.isUserInteractionEnabled = false
     }
     
     required init?(coder: NSCoder) {

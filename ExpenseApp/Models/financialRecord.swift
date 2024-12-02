@@ -1,6 +1,6 @@
 import UIKit
 
 enum FinancialRecord {
-    case income(IncomeRecord)
-    case expense(ExpenseRecord)
+    case income(IncomeData)
+    case expense(ExpenseData)
 }

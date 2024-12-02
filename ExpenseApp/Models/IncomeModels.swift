@@ -1,13 +1,5 @@
 import UIKit
 
-struct IncomeRecord {
-    let amount: String
-    let category: String
-    let explanation: String
-    let image: UIImage
-    let date: Date
-}
-
 struct IncomeCategory {
     let icon: String
     let label: String
@@ -19,6 +11,7 @@ struct IncomeData {
     let explanation: String
     let image: Data
     let date: Date
+    let id: UUID
 }
 
 

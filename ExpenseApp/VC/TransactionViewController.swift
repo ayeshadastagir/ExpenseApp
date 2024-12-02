@@ -66,24 +66,26 @@ class TransactionViewController: UIViewController {
         if let incomeRecordsData = dbFetching?.fetchIncome() {
             incomeRecords = incomeRecordsData.map { incomeData in
                 let image = UIImage(data: incomeData.image) ?? UIImage(named: "logo")!
-                return IncomeRecord(
+                return IncomeData(
                     amount: incomeData.amount,
                     category: incomeData.category,
                     explanation: incomeData.explanation,
-                    image: image,
-                    date: incomeData.date)
+                    image: image.pngData()!,
+                    date: incomeData.date,
+                    id: incomeData.id)
             }.map { .income($0) }
         }
         var expenseRecords: [FinancialRecord] = []
         if let expenseRecordsData = dbFetching?.fetchExpense() {
             expenseRecords = expenseRecordsData.map { expenseData in
                 let image = UIImage(data: expenseData.image) ?? UIImage(named: "logo")!
-                return ExpenseRecord(amount: expenseData.amount,
-                                     category: expenseData.category,
-                                     explanation: expenseData.explanation,
-                                     image: image,
-                                     date: expenseData.date)
-                
+                return ExpenseData(
+                    amount: expenseData.amount,
+                    category: expenseData.category,
+                    explanation: expenseData.explanation,
+                    image: image.pngData()!,
+                    date: expenseData.date,
+                    id: expenseData.id)
             }.map { .expense($0) }
         }
 
@@ -134,20 +136,32 @@ extension TransactionViewController: UITableViewDataSource, UITableViewDelegate 
         let record = filteredRecords[indexPath.row]
         switch record {
         case .income(let incomeRecord):
-            cell.configure(categoryLabelText: incomeRecord.category,
-                           descriptionLabelText: incomeRecord.explanation,
-                           amountLabelText: "+ $" + incomeRecord.amount,
-                           icon: incomeRecord.image,
-                           color: .customGreen,
-                           date: incomeRecord.date.formattedString())
+            if let iconImage = UIImage(data: incomeRecord.image) {
+                cell.configure(
+                    categoryLabelText: incomeRecord.category,
+                    descriptionLabelText: incomeRecord.explanation,
+                    amountLabelText: "+ $" + incomeRecord.amount,
+                    icon: iconImage,
+                    color: .customGreen,
+                    date: incomeRecord.date.formattedString()
+                )
+            } else {
+                print("Failed to convert Data to UIImage")
+            }
             return cell
         case .expense(let expenseRecord):
-            cell.configure(categoryLabelText: expenseRecord.category,
-                           descriptionLabelText: expenseRecord.explanation,
-                           amountLabelText: "- $" + expenseRecord.amount,
-                           icon: expenseRecord.image,
-                           color: .customRed,
-                           date: expenseRecord.date.formattedString())
+            if let iconImage = UIImage(data: expenseRecord.image) {
+                cell.configure(
+                    categoryLabelText: expenseRecord.category,
+                    descriptionLabelText: expenseRecord.explanation,
+                    amountLabelText: "+ $" + expenseRecord.amount,
+                    icon: iconImage,
+                    color: .customGreen,
+                    date: expenseRecord.date.formattedString()
+                )
+            } else {
+                print("Failed to convert Data to UIImage")
+            }
             return cell
         }
     }

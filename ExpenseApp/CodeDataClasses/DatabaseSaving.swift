@@ -13,12 +13,13 @@ class DatabaseHandling {
     }
     
     func saveIncome(incomeData: IncomeData) {
-        let getIncome = NSEntityDescription.insertNewObject(forEntityName: "Income", into: context) as? Income
+        let getIncome = NSEntityDescription.insertNewObject(forEntityName: Income.entityName, into: context) as? Income
         getIncome?.amount = incomeData.amount
         getIncome?.category = incomeData.category
         getIncome?.explaination = incomeData.explanation
         getIncome?.img = incomeData.image
         getIncome?.date = incomeData.date
+        getIncome?.id = incomeData.id
         do {
             try context.save()
             print("Income Data has been saved")
@@ -48,12 +49,13 @@ class DatabaseHandling {
             return false
         }
         
-        let getExpense = NSEntityDescription.insertNewObject(forEntityName: "Expense", into: context) as? Expense
+        let getExpense = NSEntityDescription.insertNewObject(forEntityName: Expense.entityName, into: context) as? Expense
         getExpense?.amount = expenseData.amount
         getExpense?.category = expenseData.category
         getExpense?.explaination = expenseData.explanation
         getExpense?.img = expenseData.image
         getExpense?.date = expenseData.date
+        getExpense?.id = expenseData.id
         do {
             try context.save()
             print("Expense Data has been saved")
@@ -75,7 +77,8 @@ class DatabaseHandling {
                     category: income.category ?? "",
                     explanation: income.explaination ?? "",
                     image: income.img! ,
-                    date: income.date ?? Date())
+                    date: income.date ?? Date(),
+                    id: income.id ?? UUID())
             }
             return incomeList
         } catch {
@@ -95,12 +98,34 @@ class DatabaseHandling {
                     category: income.category ?? "",
                     explanation: income.explaination ?? "",
                     image: income.img! ,
-                    date: income.date ?? Date())
+                    date: income.date ?? Date(),
+                    id: income.id ?? UUID())
             }
             return expenseList
         } catch {
             print("expense data cannot be fetched")
             return nil
+        }
+    }
+    
+    func deleteRecord<T: NSManagedObject>(type: T.Type, id: UUID)  {
+        let fetchRequest: NSFetchRequest<T> = type.fetchRequest() as! NSFetchRequest<T>
+        do {
+            let results = try context.fetch(fetchRequest)
+            
+            if let objectToDelete = results.first {
+                context.delete(objectToDelete)
+                
+                try context.save()
+                print("Record deleted successfully")
+                
+            } else {
+                print("No record found with the given ID")
+               
+            }
+        } catch {
+            print("Error deleting record")
+            return 
         }
     }
 }

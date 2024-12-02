@@ -14,4 +14,8 @@ class Image: UIImageView {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
+extension Image {
+    static func from(data: Data) -> UIImage? {
+        return UIImage(data: data)
+    }
+}

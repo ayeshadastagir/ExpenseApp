@@ -194,7 +194,8 @@ class IncomeViewController: UIViewController {
             category: selectCategoryView.selectedCategoryLabel.text!,
             explanation: explainationTF.text!,
             image: selectedImageData,
-            date: Date()
+            date: Date(),
+            id: UUID()
         )
         dataHandler?.saveIncome(incomeData: income)
         setDefaultValue()

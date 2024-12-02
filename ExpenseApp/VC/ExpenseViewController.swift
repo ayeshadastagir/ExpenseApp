@@ -228,7 +228,8 @@ class ExpenseViewController: UIViewController {
             category: selectCategoryView.selectedCategoryLabel.text!,
             explanation: explainationTF.text!,
             image: selectedImageData,
-            date: Date()
+            date: Date(),
+            id: UUID()
         )
         if dataHandler?.saveExpense(expenseData: expense) == true {
             setDefaultValue()
