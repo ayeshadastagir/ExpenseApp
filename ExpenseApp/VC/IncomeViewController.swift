@@ -161,9 +161,9 @@ class IncomeViewController: UIViewController {
         let dataHandler = DatabaseHandling()
         guard let selectedImage = selectCategoryView.logo.image?.pngData() else { return }
         let income = IncomeData(
-            amount: enterAmountTF.text!,
-            category: selectCategoryView.selectedCategoryLabel.text!,
-            explanation: explainationTF.text!,
+            amount: enterAmountTF.text ?? "",
+            category: selectCategoryView.selectedCategoryLabel.text ?? "",
+            explanation: explainationTF.text ?? "",
             image: selectedImage,
             date: Date(),
             id: UUID()
@@ -202,6 +202,8 @@ class IncomeViewController: UIViewController {
             addButton.isEnabled = false
             addButton.alpha = 0.5
         }
+        let text = enterAmountTF.text?.toCurrencyFormat
+        enterAmountTF.text = text
     }
 }
 

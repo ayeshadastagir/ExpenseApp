@@ -10,6 +10,7 @@
 		7B11B3FC2CEB123600C99BA1 /* TransactionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B11B3FB2CEB123600C99BA1 /* TransactionTableViewCell.swift */; };
 		7B11B4072CEB4DB300C99BA1 /* ExpenseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B11B4062CEB4DB300C99BA1 /* ExpenseModels.swift */; };
 		7B11B4092CEB4E3500C99BA1 /* IncomeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B11B4082CEB4E3500C99BA1 /* IncomeModels.swift */; };
+		7B34BD802D0084B1004A739B /* CurrencyConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B34BD7F2D0084B1004A739B /* CurrencyConvert.swift */; };
 		7B5E47212CEF09F300AA3261 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5E47202CEF09F300AA3261 /* ColorExtension.swift */; };
 		7B5E47232CEF0F0100AA3261 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B5E47222CEF0F0100AA3261 /* Assets.xcassets */; };
 		7B6131292CEC675A0063AF5B /* Income+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6131272CEC675A0063AF5B /* Income+CoreDataClass.swift */; };
@@ -66,6 +67,7 @@
 		7B11B3FB2CEB123600C99BA1 /* TransactionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionTableViewCell.swift; sourceTree = "<group>"; };
 		7B11B4062CEB4DB300C99BA1 /* ExpenseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseModels.swift; sourceTree = "<group>"; };
 		7B11B4082CEB4E3500C99BA1 /* IncomeModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeModels.swift; sourceTree = "<group>"; };
+		7B34BD7F2D0084B1004A739B /* CurrencyConvert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConvert.swift; sourceTree = "<group>"; };
 		7B5E47202CEF09F300AA3261 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		7B5E47222CEF0F0100AA3261 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7B6131252CEC675A0063AF5B /* Income+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Income+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 				7B5E47202CEF09F300AA3261 /* ColorExtension.swift */,
 				7B61312D2CEC6D7E0063AF5B /* DateExtension.swift */,
 				7B61312F2CEC79E90063AF5B /* FinancialRecordExtension.swift */,
+				7B34BD7F2D0084B1004A739B /* CurrencyConvert.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -427,6 +430,7 @@
 				7B61312B2CEC675A0063AF5B /* Income+CoreDataProperties.swift in Sources */,
 				7B11B4072CEB4DB300C99BA1 /* ExpenseModels.swift in Sources */,
 				7B6131302CEC79E90063AF5B /* FinancialRecordExtension.swift in Sources */,
+				7B34BD802D0084B1004A739B /* CurrencyConvert.swift in Sources */,
 				7BE039A92CE322F100AB5170 /* IncomeViewController.swift in Sources */,
 				7BE0399D2CE321DD00AB5170 /* Label.swift in Sources */,
 				7BE039AE2CE3233E00AB5170 /* CardView.swift in Sources */,

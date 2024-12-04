@@ -204,15 +204,17 @@ class ExpenseViewController: UIViewController {
             enterAmountTF.shake()
         }
         validateFields()
+        let text = enterAmountTF.text?.toCurrencyFormat
+        enterAmountTF.text = text
     }
 
     @objc private func dataSaved() {
         let dataHandler = DatabaseHandling()
         guard let selectedImage = selectCategoryView.logo.image?.pngData() else { return }
         let expense = ExpenseData(
-            amount: enterAmountTF.text!,
-            category: selectCategoryView.selectedCategoryLabel.text!,
-            explanation: explainationTF.text!,
+            amount: enterAmountTF.text ?? "",
+            category: selectCategoryView.selectedCategoryLabel.text ?? "",
+            explanation: explainationTF.text ?? "",
             image: selectedImage,
             date: Date(),
             id: UUID()

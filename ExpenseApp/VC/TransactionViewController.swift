@@ -94,6 +94,63 @@ class TransactionViewController: UIViewController {
         }
         transactionsTableView.reloadData()
     }
+    
+    private func deleteRecord(id: UUID) {
+        let dbHandling = DatabaseHandling()
+        let record = financialRecords.first { record in
+            switch record {
+            case .income(let incomeRecord):
+                return incomeRecord.id == id
+            case .expense(let expenseRecord):
+                return expenseRecord.id == id
+            }
+        }
+        guard let record = record else {
+            print("Record not found")
+            return
+        }
+        switch record {
+        case .income:
+            dbHandling?.deleteRecord(type: Income.self, id: id)
+        case .expense:
+            dbHandling?.deleteRecord(type: Expense.self, id: id)
+        }
+        fetchData()
+    }
+    
+    private func selectType(id: UUID, type: String) {
+        let alertController = UIAlertController(
+            title: "Update Record",
+            message: "Choose the type of record you want to update",
+            preferredStyle: .actionSheet
+        )
+        
+        if type == "Income" {
+            let incomeAction = UIAlertAction(title: "Update Income", style: .default) { [weak self] _ in
+                let incomeUpdateVC = IncomeUpdateViewController(recordId: id)
+                incomeUpdateVC.modalTransitionStyle = .crossDissolve
+                incomeUpdateVC.modalPresentationStyle = .fullScreen
+                self?.present(incomeUpdateVC, animated: true, completion: nil)
+            }
+            alertController.addAction(incomeAction)
+        }
+        
+        if type == "Expense" {
+            let expenseAction = UIAlertAction(title: "Update Expense", style: .default) { [weak self] _ in
+                let expenseUpdateVC = ExpenseUpdateViewController(recordId: id)
+                expenseUpdateVC.modalTransitionStyle = .crossDissolve
+                expenseUpdateVC.modalPresentationStyle = .fullScreen
+                self?.present(expenseUpdateVC, animated: true, completion: nil)
+            }
+            alertController.addAction(expenseAction)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true)
+        fetchData()
+        transactionsTableView.reloadData()
+    }
 }
 
 extension TransactionViewController: UITableViewDataSource, UITableViewDelegate {
@@ -104,18 +161,24 @@ extension TransactionViewController: UITableViewDataSource, UITableViewDelegate 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: TransactionTableViewCell.reuseIdentifier, for: indexPath) as! TransactionTableViewCell
-        let record = filteredRecords[indexPath.row]
+        let record = financialRecords[indexPath.row]
         switch record {
         case .income(let incomeRecord):
             if let iconImage = UIImage(data: incomeRecord.image) {
                 cell.configure(
                     categoryLabelText: incomeRecord.category,
                     descriptionLabelText: incomeRecord.explanation,
-                    amountLabelText: "+ $" + incomeRecord.amount,
+                    amountLabelText: "+" + incomeRecord.amount.toCurrencyFormat,
                     icon: iconImage,
                     color: .customGreen,
                     date: incomeRecord.date.formattedString()
                 )
+                cell.deleteClosure = { [weak self] in
+                    self?.deleteRecord(id: incomeRecord.id)
+                }
+                cell.updateClosure = { [weak self] in
+                    self?.selectType(id: incomeRecord.id, type: Income.entityName)
+                }
             } else {
                 print("Failed to convert Data to UIImage")
             }
@@ -125,11 +188,17 @@ extension TransactionViewController: UITableViewDataSource, UITableViewDelegate 
                 cell.configure(
                     categoryLabelText: expenseRecord.category,
                     descriptionLabelText: expenseRecord.explanation,
-                    amountLabelText: "+ $" + expenseRecord.amount,
+                    amountLabelText: "-" + expenseRecord.amount.toCurrencyFormat,
                     icon: iconImage,
                     color: .customRed,
                     date: expenseRecord.date.formattedString()
                 )
+                cell.deleteClosure = { [weak self] in
+                    self?.deleteRecord(id: expenseRecord.id)
+                }
+                cell.updateClosure = { [weak self] in
+                    self?.selectType(id: expenseRecord.id, type: Expense.entityName)
+                }
             } else {
                 print("Failed to convert Data to UIImage")
             }

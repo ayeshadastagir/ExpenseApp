@@ -71,9 +71,10 @@ class ExpenseUpdateViewController: UIViewController {
         btn.addTarget(self, action: #selector(dataUpdated), for: .touchUpInside)
         return btn
     }()
-    var categoryViewHeight: NSLayoutConstraint!
-    var tableBackgroundViewTop: NSLayoutConstraint!
-    var tableViewTop: NSLayoutConstraint!
+    private var initialAmount: String?
+    private var categoryViewHeight: NSLayoutConstraint!
+    private var tableBackgroundViewTop: NSLayoutConstraint!
+    private var tableViewTop: NSLayoutConstraint!
     
     init(recordId: UUID) {
         self.recordId = recordId
@@ -171,6 +172,7 @@ class ExpenseUpdateViewController: UIViewController {
             name: expenseData.category,
             img: UIImage(data: expenseData.image)
         )
+        initialAmount = expenseData.amount
         validateFields()
     }
     
@@ -200,6 +202,8 @@ class ExpenseUpdateViewController: UIViewController {
             updateButton.isEnabled = false
             updateButton.alpha = 0.5
         }
+        let text = enterAmountTF.text?.toCurrencyFormat
+        enterAmountTF.text = text
     }
     
     @objc private func validateAndDatafetching() {
@@ -216,14 +220,13 @@ class ExpenseUpdateViewController: UIViewController {
     
     @objc private func dataUpdated() {
         let dataHandler = DatabaseHandling()
-        let selectedImage = selectCategoryView.logo.image
-        let selectedImageData = selectedImage!.pngData()!
+        guard let selectedImage = selectCategoryView.logo.image?.pngData() else { return }
         
         let updatedExpense = ExpenseData(
-            amount: enterAmountTF.text!,
-            category: selectCategoryView.selectedCategoryLabel.text!,
-            explanation: explainationTF.text!,
-            image: selectedImageData,
+            amount: enterAmountTF.text ?? "",
+            category: selectCategoryView.selectedCategoryLabel.text ?? "",
+            explanation: explainationTF.text ?? "",
+            image: selectedImage,
             date: existingExpenseData?.date ?? Date(),
             id: recordId )
         
@@ -231,7 +234,7 @@ class ExpenseUpdateViewController: UIViewController {
         homeScreen.modalTransitionStyle = .crossDissolve
         homeScreen.modalPresentationStyle = .fullScreen
         
-        if dataHandler?.updateExpense(id: recordId, updatedExpenseData: updatedExpense) == true {
+        if dataHandler?.updateExpense(id: recordId, updatedExpenseData: updatedExpense, oldAmount: initialAmount ?? "") == true {
             self.present(homeScreen, animated: true, completion: nil)
         } else {
             let alert = UIAlertController(

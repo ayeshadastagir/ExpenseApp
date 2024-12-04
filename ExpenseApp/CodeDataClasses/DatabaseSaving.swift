@@ -41,7 +41,7 @@ class DatabaseHandling {
         let totalIncome = totalIncome()
         let totalExpense = totalExpense()
         let totalProposedExpenses = totalExpense + (Int(expenseData.amount) ?? 0)
-        guard totalProposedExpenses >= totalIncome else {
+        guard totalProposedExpenses <= totalIncome else {
             print("Cannot add expense: Expenses exceed total income")
             return false
         }
@@ -176,12 +176,12 @@ class DatabaseHandling {
         return totalExpense
     }
     
-    func updateIncome(id: UUID, updatedIncomeData: IncomeData) -> Bool {
+    func updateIncome(id: UUID, updatedIncomeData: IncomeData, oldValue: String) -> Bool {
         let totalExpense = totalExpense()
         let totalIncome = totalIncome()
-        let totalProposedIncome = totalIncome + (Int(updatedIncomeData.amount) ?? 0)
+        let totalProposedIncome = totalIncome + (Int(updatedIncomeData.amount) ?? 0) - (Int(oldValue) ?? 0)
         
-        guard totalProposedIncome <= totalExpense else {
+        guard totalProposedIncome >= totalExpense else {
             print("Cannot update Income Expenses exceed total income")
             return false
         }
@@ -210,14 +210,13 @@ class DatabaseHandling {
         }
     }
     
-    func updateExpense(id: UUID, updatedExpenseData: ExpenseData) -> Bool {
-        
+    func updateExpense(id: UUID, updatedExpenseData: ExpenseData, oldAmount :String) -> Bool {
         let totalIncome = totalIncome()
         let totalExpense = totalExpense()
         
-        let totalProposedExpenses = totalExpense + (Int(updatedExpenseData.amount) ?? 0)
+        let totalProposedExpenses = totalExpense + (Int(updatedExpenseData.amount) ?? 0) - (Int(oldAmount) ?? 0)
         
-        guard totalProposedExpenses >= totalIncome else {
+        guard totalProposedExpenses <= totalIncome else {
             print("Cannot add expense: Expenses exceed total income")
             return false
         }

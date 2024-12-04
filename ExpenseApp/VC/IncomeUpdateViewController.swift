@@ -64,10 +64,11 @@ class IncomeUpdateViewController: UIViewController {
         btn.addTarget(self, action: #selector(dataUpdated), for: .touchUpInside)
         return btn
     }()
-    var categoryViewHeight: NSLayoutConstraint!
-    var tableBackgroundViewTop: NSLayoutConstraint!
-    var tableViewTop: NSLayoutConstraint!
-    
+    private var categoryViewHeight: NSLayoutConstraint!
+    private var tableBackgroundViewTop: NSLayoutConstraint!
+    private var tableViewTop: NSLayoutConstraint!
+    private var initialAmount: String?
+
     init(recordId: UUID) {
         self.recordId = recordId
         super.init(nibName: nil, bundle: nil)
@@ -164,6 +165,7 @@ class IncomeUpdateViewController: UIViewController {
             name: incomeData.category,
             img:  UIImage(data: incomeData.image)
         )
+        initialAmount = incomeData.amount
         validateFields()
     }
     
@@ -193,24 +195,25 @@ class IncomeUpdateViewController: UIViewController {
             updateButton.isEnabled = false
             updateButton.alpha = 0.5
         }
+        let text = enterAmountTF.text?.toCurrencyFormat
+        enterAmountTF.text = text
     }
     
     @objc private func dataUpdated() {
         let dataHandler = DatabaseHandling()
-        let selectedImage = selectCategoryView.logo.image
-        let selectedImageData = selectedImage!.pngData()!
+        guard let selectedImage = selectCategoryView.logo.image?.pngData() else { return }
         let homeScreen = CustomTabBarController()
         homeScreen.modalTransitionStyle = .crossDissolve
         homeScreen.modalPresentationStyle = .fullScreen
         
         let updatedIncome = IncomeData(
-            amount: enterAmountTF.text!,
-            category: selectCategoryView.selectedCategoryLabel.text!,
-            explanation: explainationTF.text!,
-            image: selectedImageData,
+            amount: enterAmountTF.text ?? "",
+            category: selectCategoryView.selectedCategoryLabel.text ?? "",
+            explanation: explainationTF.text ?? "",
+            image: selectedImage,
             date: existingIncomeData?.date ?? Date(),
             id: recordId )
-        if dataHandler?.updateIncome(id: recordId, updatedIncomeData: updatedIncome) == true {
+        if dataHandler?.updateIncome(id: recordId, updatedIncomeData: updatedIncome, oldValue: initialAmount ?? "") == true {
             self.present(homeScreen, animated: true, completion: nil)
         } else {
             let alert = UIAlertController(

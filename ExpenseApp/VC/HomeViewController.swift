@@ -77,13 +77,13 @@ class HomeViewController: UIViewController {
     private func updateAmounts() {
         let dbFetching = DatabaseHandling()
         let totalExpense = dbFetching?.totalExpense() ?? 0
-        expenseView.amountLabel.text = "$" + String(totalExpense)
+        expenseView.amountLabel.text = String(totalExpense).toCurrencyFormat
         
         let totalIncome = dbFetching?.totalIncome() ?? 0
-        incomeView.amountLabel.text = "$" + String(totalIncome)
+        incomeView.amountLabel.text = String(totalIncome).toCurrencyFormat
         
         let balance = totalIncome - totalExpense
-        walletView.amountLabel.text = "$" + String(balance)
+        walletView.amountLabel.text = String(balance).toCurrencyFormat
     }
     
     private func fetchData() {
@@ -101,7 +101,7 @@ class HomeViewController: UIViewController {
         }
     }
     
-    private func deleteRecord(id: UUID) {
+   private func deleteRecord(id: UUID) {
         let dbHandling = DatabaseHandling()
         let record = financialRecords.first { record in
             switch record {
@@ -157,7 +157,6 @@ class HomeViewController: UIViewController {
         present(alertController, animated: true)
         fetchData()
         updateAmounts()
-        transactionsTableView.reloadData()
     }
 
 }
@@ -177,7 +176,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
                 cell.configure(
                     categoryLabelText: incomeRecord.category,
                     descriptionLabelText: incomeRecord.explanation,
-                    amountLabelText: "+ $" + incomeRecord.amount,
+                    amountLabelText: "+" + incomeRecord.amount.toCurrencyFormat,
                     icon: iconImage,
                     color: .customGreen,
                     date: incomeRecord.date.formattedString()
@@ -197,7 +196,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
                 cell.configure(
                     categoryLabelText: expenseRecord.category,
                     descriptionLabelText: expenseRecord.explanation,
-                    amountLabelText: "- $" + expenseRecord.amount,
+                    amountLabelText: "-" + expenseRecord.amount.toCurrencyFormat,
                     icon: iconImage,
                     color: .customRed,
                     date: expenseRecord.date.formattedString()
