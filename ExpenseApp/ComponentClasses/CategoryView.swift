@@ -43,7 +43,7 @@ class CategoryView: UIView {
         ])
     }
     
-    func didUpdateCategory(name: String, img: UIImage) {
+    func didUpdateCategory(name: String, img: UIImage?) {
         selectedCategoryLabel.text = name
         logo.image = img 
     }

@@ -162,7 +162,7 @@ class IncomeUpdateViewController: UIViewController {
         explainationTF.text = incomeData.explanation
         selectCategoryView.didUpdateCategory(
             name: incomeData.category,
-            img:  UIImage(data: incomeData.image)!
+            img:  UIImage(data: incomeData.image)
         )
         validateFields()
     }
@@ -256,7 +256,7 @@ extension IncomeUpdateViewController: UITableViewDataSource, UITableViewDelegate
         cell.selectCategoryType = { [weak self] selectedLabelText, img in
             self?.selectCategoryView.didUpdateCategory(
                 name: selectedLabelText ?? "",
-                img: img!)
+                img: img)
             self?.resetUI()
         }
         return cell

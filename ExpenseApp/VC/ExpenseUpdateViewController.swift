@@ -80,6 +80,7 @@ class ExpenseUpdateViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         fetchExistingRecord()
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -168,7 +169,7 @@ class ExpenseUpdateViewController: UIViewController {
         explainationTF.text = expenseData.explanation
         selectCategoryView.didUpdateCategory(
             name: expenseData.category,
-            img: UIImage(data: expenseData.image)!
+            img: UIImage(data: expenseData.image)
         )
         validateFields()
     }
@@ -276,7 +277,7 @@ extension ExpenseUpdateViewController: UITableViewDataSource, UITableViewDelegat
         cell.selectCategoryType = { [weak self] selectedLabelText, img in
             self?.selectCategoryView.didUpdateCategory(
                 name: selectedLabelText ?? "",
-                img: img!)
+                img: img)
             self?.resetUI()
         }
         return cell

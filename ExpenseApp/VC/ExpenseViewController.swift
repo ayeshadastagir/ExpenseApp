@@ -208,13 +208,12 @@ class ExpenseViewController: UIViewController {
 
     @objc private func dataSaved() {
         let dataHandler = DatabaseHandling()
-        let selectedImage = selectCategoryView.logo.image
-        let selectedImageData = selectedImage!.pngData()!
+        guard let selectedImage = selectCategoryView.logo.image?.pngData() else { return }
         let expense = ExpenseData(
             amount: enterAmountTF.text!,
             category: selectCategoryView.selectedCategoryLabel.text!,
             explanation: explainationTF.text!,
-            image: selectedImageData,
+            image: selectedImage,
             date: Date(),
             id: UUID()
         )

@@ -159,13 +159,12 @@ class IncomeViewController: UIViewController {
         
     @objc private func dataSaved() {
         let dataHandler = DatabaseHandling()
-        let selectedImage = selectCategoryView.logo.image
-        let selectedImageData = selectedImage!.pngData()!
+        guard let selectedImage = selectCategoryView.logo.image?.pngData() else { return }
         let income = IncomeData(
             amount: enterAmountTF.text!,
             category: selectCategoryView.selectedCategoryLabel.text!,
             explanation: explainationTF.text!,
-            image: selectedImageData,
+            image: selectedImage,
             date: Date(),
             id: UUID()
         )
@@ -217,7 +216,7 @@ extension IncomeViewController: UITableViewDataSource, UITableViewDelegate {
         cell.selectCategoryType = { [weak self] selectedLabelText, img in
             self?.selectCategoryView.didUpdateCategory(
                 name: selectedLabelText ?? "",
-                img: img!) 
+                img: img) 
             self?.resetUI()
         }
         let card = incomeType[indexPath.row]
