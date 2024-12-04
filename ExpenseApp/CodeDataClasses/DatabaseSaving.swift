@@ -28,27 +28,23 @@ class DatabaseHandling {
         }
     }
     
+    func totalIncome() -> Int {
+        let incomeList = fetchIncome() ?? []
+        var totalIncome: Int = 0
+        incomeList.forEach {
+            totalIncome += Int($0.amount) ?? 0
+        }
+        return totalIncome
+    }
+    
     func saveExpense(expenseData: ExpenseData) -> Bool {
-        guard let incomeList = fetchIncome(), !incomeList.isEmpty else {
-            print("Cannot add expense: No income data exists")
-            return false
-        }
-        var totalIncome: Double = 0.0
-        incomeList.forEach { totalIncome += Double($0.amount) ?? 0.0 }
-        
-        var totalExistingExpenses: Double = 0.0
-        let existingExpenses = fetchExpense() ?? []
-        existingExpenses.forEach { expense in
-            totalExistingExpenses += Double(expense.amount) ?? 0.0
-        }
-        
-        let newExpenseAmount = Double(expenseData.amount) ?? 0.0
-        let totalProposedExpenses = totalExistingExpenses + newExpenseAmount
-        guard totalProposedExpenses <= totalIncome else {
+        let totalIncome = totalIncome()
+        let totalExpense = totalExpense()
+        let totalProposedExpenses = totalExpense + (Int(expenseData.amount) ?? 0)
+        guard totalProposedExpenses >= totalIncome else {
             print("Cannot add expense: Expenses exceed total income")
             return false
         }
-        
         let getExpense = NSEntityDescription.insertNewObject(forEntityName: Expense.entityName, into: context) as? Expense
         getExpense?.amount = expenseData.amount
         getExpense?.category = expenseData.category
@@ -71,14 +67,14 @@ class DatabaseHandling {
         do {
             let incomeData = try context.fetch(fetchRequest)
             print("Income Data has been fetched")
-            let incomeList = incomeData.map { income -> IncomeData in
+            let incomeList = incomeData.map {
                 IncomeData(
-                    amount: income.amount ?? "",
-                    category: income.category ?? "",
-                    explanation: income.explaination ?? "",
-                    image: income.img! ,
-                    date: income.date ?? Date(),
-                    id: income.id ?? UUID())
+                    amount: $0.amount ?? "",
+                    category: $0.category ?? "",
+                    explanation: $0.explaination ?? "",
+                    image: $0.img! ,
+                    date: $0.date ?? Date(),
+                    id: $0.id ?? UUID())
             }
             return incomeList
         } catch {
@@ -92,14 +88,14 @@ class DatabaseHandling {
         do {
             let expenseData = try context.fetch(fetchRequest)
             print("expense Data has been fetched")
-            let expenseList = expenseData.map { income -> ExpenseData in
+            let expenseList = expenseData.map {
                 ExpenseData(
-                    amount: income.amount ?? "",
-                    category: income.category ?? "",
-                    explanation: income.explaination ?? "",
-                    image: income.img! ,
-                    date: income.date ?? Date(),
-                    id: income.id ?? UUID())
+                    amount: $0.amount ?? "",
+                    category: $0.category ?? "",
+                    explanation: $0.explaination ?? "",
+                    image: $0.img! ,
+                    date: $0.date ?? Date(),
+                    id: $0.id ?? UUID())
             }
             return expenseList
         } catch {
@@ -147,7 +143,7 @@ class DatabaseHandling {
             return nil
         }
     }
-        
+    
     func fetchSpecificExpense(id: UUID) -> ExpenseData? {
         let fetchRequest: NSFetchRequest<Expense> = Expense.fetchRequest()
         do {
@@ -171,7 +167,24 @@ class DatabaseHandling {
         }
     }
     
+    func totalExpense() -> Int {
+        let expenseList = fetchExpense() ?? []
+        var totalExpense: Int = 0
+        expenseList.forEach {
+            totalExpense += Int($0.amount) ?? 0
+        }
+        return totalExpense
+    }
+    
     func updateIncome(id: UUID, updatedIncomeData: IncomeData) -> Bool {
+        let totalExpense = totalExpense()
+        let totalIncome = totalIncome()
+        let totalProposedIncome = totalIncome + (Int(updatedIncomeData.amount) ?? 0)
+        
+        guard totalProposedIncome <= totalExpense else {
+            print("Cannot update Income Expenses exceed total income")
+            return false
+        }
         let fetchRequest: NSFetchRequest<Income> = Income.fetchRequest()
         
         do {
@@ -199,22 +212,12 @@ class DatabaseHandling {
     
     func updateExpense(id: UUID, updatedExpenseData: ExpenseData) -> Bool {
         
-        guard let incomeList = fetchIncome(), !incomeList.isEmpty else {
-            print("Cannot add expense: No income data exists")
-            return false
-        }
-        var totalIncome: Double = 0.0
-        incomeList.forEach { totalIncome += Double($0.amount) ?? 0.0 }
+        let totalIncome = totalIncome()
+        let totalExpense = totalExpense()
         
-        var totalExistingExpenses: Double = 0.0
-        let existingExpenses = fetchExpense() ?? []
-        existingExpenses.forEach { expense in
-            totalExistingExpenses += Double(expense.amount) ?? 0.0
-        }
+        let totalProposedExpenses = totalExpense + (Int(updatedExpenseData.amount) ?? 0)
         
-        let newExpenseAmount = Double(updatedExpenseData.amount) ?? 0.0
-        let totalProposedExpenses = totalExistingExpenses + newExpenseAmount
-        guard totalProposedExpenses <= totalIncome else {
+        guard totalProposedExpenses >= totalIncome else {
             print("Cannot add expense: Expenses exceed total income")
             return false
         }
@@ -232,7 +235,6 @@ class DatabaseHandling {
                 expense.img = updatedExpenseData.image
                 expense.date = updatedExpenseData.date
                 expense.id = updatedExpenseData.id
-                
                 try context.save()
                 print("Income data updated successfully")
                 return true
@@ -245,7 +247,34 @@ class DatabaseHandling {
             return false
         }
     }
-            
+    
+    func fetchAllFinancialRecords() -> [FinancialRecord] {
+        guard let incomeRecordsData = fetchIncome(),
+              let expenseRecordsData = fetchExpense() else {
+            return []
+        }
+        let incomeRecords: [FinancialRecord] = incomeRecordsData.map {
+            .income(IncomeData(
+                amount: $0.amount,
+                category: $0.category,
+                explanation: $0.explanation,
+                image: $0.image,
+                date: $0.date,
+                id: $0.id
+            ))
+        }
+        let expenseRecords: [FinancialRecord] = expenseRecordsData.map {
+            .expense(ExpenseData(
+                amount: $0.amount,
+                category: $0.category,
+                explanation: $0.explanation,
+                image: $0.image,
+                date: $0.date,
+                id: $0.id
+            ))
+        }
+        return (incomeRecords + expenseRecords).sorted { $0.date > $1.date }
+    }
 }
         
         

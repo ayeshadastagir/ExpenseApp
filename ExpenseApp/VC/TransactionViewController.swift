@@ -61,36 +61,7 @@ class TransactionViewController: UIViewController {
     
     private func fetchData() {
         let dbFetching = DatabaseHandling()
-        var incomeRecords: [FinancialRecord] = []
-
-        if let incomeRecordsData = dbFetching?.fetchIncome() {
-            incomeRecords = incomeRecordsData.map { incomeData in
-                let image = UIImage(data: incomeData.image) ?? UIImage(named: "logo")!
-                return IncomeData(
-                    amount: incomeData.amount,
-                    category: incomeData.category,
-                    explanation: incomeData.explanation,
-                    image: image.pngData()!,
-                    date: incomeData.date,
-                    id: incomeData.id)
-            }.map { .income($0) }
-        }
-        var expenseRecords: [FinancialRecord] = []
-        if let expenseRecordsData = dbFetching?.fetchExpense() {
-            expenseRecords = expenseRecordsData.map { expenseData in
-                let image = UIImage(data: expenseData.image) ?? UIImage(named: "logo")!
-                return ExpenseData(
-                    amount: expenseData.amount,
-                    category: expenseData.category,
-                    explanation: expenseData.explanation,
-                    image: image.pngData()!,
-                    date: expenseData.date,
-                    id: expenseData.id)
-            }.map { .expense($0) }
-        }
-
-        let allRecords = incomeRecords + expenseRecords
-        let sortedRecords = allRecords.sorted { $0.date > $1.date }
+        let sortedRecords = dbFetching?.fetchAllFinancialRecords() ?? []
         financialRecords = sortedRecords
         filteredRecords = sortedRecords
         if !financialRecords.isEmpty {
@@ -156,7 +127,7 @@ extension TransactionViewController: UITableViewDataSource, UITableViewDelegate 
                     descriptionLabelText: expenseRecord.explanation,
                     amountLabelText: "+ $" + expenseRecord.amount,
                     icon: iconImage,
-                    color: .customGreen,
+                    color: .customRed,
                     date: expenseRecord.date.formattedString()
                 )
             } else {

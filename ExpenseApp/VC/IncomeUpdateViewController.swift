@@ -199,6 +199,9 @@ class IncomeUpdateViewController: UIViewController {
         let dataHandler = DatabaseHandling()
         let selectedImage = selectCategoryView.logo.image
         let selectedImageData = selectedImage!.pngData()!
+        let homeScreen = CustomTabBarController()
+        homeScreen.modalTransitionStyle = .crossDissolve
+        homeScreen.modalPresentationStyle = .fullScreen
         
         let updatedIncome = IncomeData(
             amount: enterAmountTF.text!,
@@ -208,17 +211,16 @@ class IncomeUpdateViewController: UIViewController {
             date: existingIncomeData?.date ?? Date(),
             id: recordId )
         if dataHandler?.updateIncome(id: recordId, updatedIncomeData: updatedIncome) == true {
-            let homeScreen = CustomTabBarController()
-            homeScreen.modalTransitionStyle = .crossDissolve
-            homeScreen.modalPresentationStyle = .fullScreen
             self.present(homeScreen, animated: true, completion: nil)
         } else {
             let alert = UIAlertController(
                 title: "Update Failed",
-                message: "Unable to update income record.",
+                message: "Unable to update income record. Expense exceeds income",
                 preferredStyle: .alert
             )
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+                self.present(homeScreen, animated: true, completion: nil)
+            }))
             present(alert, animated: true, completion: nil)
         }
     }
@@ -248,9 +250,13 @@ extension IncomeUpdateViewController: UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CustomTableViewCell.reuseIdentifier, for: indexPath) as! CustomTableViewCell
         let card = incomeType[indexPath.row]
-        cell.configure(text: card.label, icon: UIImage(named: card.icon))
+        cell.configure(
+            text: card.label,
+            icon: UIImage(named: card.icon))
         cell.selectCategoryType = { [weak self] selectedLabelText, img in
-            self?.selectCategoryView.didUpdateCategory(name: selectedLabelText ?? "", img: img!)
+            self?.selectCategoryView.didUpdateCategory(
+                name: selectedLabelText ?? "",
+                img: img!)
             self?.resetUI()
         }
         return cell

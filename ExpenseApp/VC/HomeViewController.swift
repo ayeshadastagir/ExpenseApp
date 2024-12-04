@@ -30,6 +30,12 @@ class HomeViewController: UIViewController {
         fetchData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateAmounts()
+        fetchData()
+    }
+    
     private func setupUI() {
         view.addSubview(welcomeLabel)
         view.addSubview(incomeView)
@@ -70,59 +76,19 @@ class HomeViewController: UIViewController {
     
     private func updateAmounts() {
         let dbFetching = DatabaseHandling()
-        var totalExpense: Int = 0
-        if let expenseRecords = dbFetching?.fetchExpense() {
-            expenseRecords.forEach {
-                if let amount = Int($0.amount) {totalExpense += amount } }
-            expenseView.amountLabel.text = "$" + String(totalExpense)
-        } else {
-            print("No expense records found.")
-        }
-        var totalIncome: Int = 0
-        if let incomeRecords = dbFetching?.fetchIncome() {
-            incomeRecords.forEach {
-                if let amount = Int($0.amount) { totalIncome += amount } }
-            incomeView.amountLabel.text = "$" + String(totalIncome)
-        } else {
-            print("No income records found.")
-        }
+        let totalExpense = dbFetching?.totalExpense() ?? 0
+        expenseView.amountLabel.text = "$" + String(totalExpense)
+        
+        let totalIncome = dbFetching?.totalIncome() ?? 0
+        incomeView.amountLabel.text = "$" + String(totalIncome)
+        
         let balance = totalIncome - totalExpense
         walletView.amountLabel.text = "$" + String(balance)
     }
     
     private func fetchData() {
         let dbFetching = DatabaseHandling()
-        var incomeRecords: [FinancialRecord] = []
-        var expenseRecords: [FinancialRecord] = []
-        
-        if let incomeRecordsData = dbFetching?.fetchIncome() {
-            incomeRecords = incomeRecordsData.map {
-                return IncomeData(
-                    amount: $0.amount,
-                    category: $0.category,
-                    explanation: $0.explanation,
-                    image: $0.image,
-                    date: $0.date,
-                    id: $0.id
-                )
-            }.map { .income($0) }
-        }
-        
-        if let fetchedExpenseData = dbFetching?.fetchExpense() {
-            expenseRecords = fetchedExpenseData.map {
-                return ExpenseData(
-                    amount: $0.amount,
-                    category: $0.category,
-                    explanation: $0.explanation,
-                    image: $0.image,
-                    date: $0.date,
-                    id: $0.id
-                )
-            }.map { .expense($0) }
-        }
-        
-        let allRecords = incomeRecords + expenseRecords
-        let sortedRecords = allRecords.sorted { $0.date > $1.date }
+        let sortedRecords = dbFetching?.fetchAllFinancialRecords() ?? []
         financialRecords = Array(sortedRecords.prefix(5))
         
         if !financialRecords.isEmpty {
@@ -157,7 +123,6 @@ class HomeViewController: UIViewController {
         }
         fetchData()
         updateAmounts()
-        transactionsTableView.reloadData()
     }
     
     private func selectType(id: UUID, type: String) {
@@ -166,8 +131,9 @@ class HomeViewController: UIViewController {
             message: "Choose the type of record you want to update",
             preferredStyle: .actionSheet
         )
+        
         if type == "Income" {
-            let incomeAction = UIAlertAction(title: "Income", style: .default) { [weak self] _ in
+            let incomeAction = UIAlertAction(title: "Update Income", style: .default) { [weak self] _ in
                 let incomeUpdateVC = IncomeUpdateViewController(recordId: id)
                 incomeUpdateVC.modalTransitionStyle = .crossDissolve
                 incomeUpdateVC.modalPresentationStyle = .fullScreen
@@ -177,7 +143,7 @@ class HomeViewController: UIViewController {
         }
         
         if type == "Expense" {
-            let expenseAction = UIAlertAction(title: "Expense", style: .default) { [weak self] _ in
+            let expenseAction = UIAlertAction(title: "Update Expense", style: .default) { [weak self] _ in
                 let expenseUpdateVC = ExpenseUpdateViewController(recordId: id)
                 expenseUpdateVC.modalTransitionStyle = .crossDissolve
                 expenseUpdateVC.modalPresentationStyle = .fullScreen
@@ -185,7 +151,13 @@ class HomeViewController: UIViewController {
             }
             alertController.addAction(expenseAction)
         }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
         present(alertController, animated: true)
+        fetchData()
+        updateAmounts()
+        transactionsTableView.reloadData()
     }
 
 }
@@ -214,7 +186,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
                     self?.deleteRecord(id: incomeRecord.id)
                 }
                 cell.updateClosure = { [weak self] in
-                    self?.selectType(id: incomeRecord.id, type: "Income")
+                    self?.selectType(id: incomeRecord.id, type: Income.entityName)
                 }
             } else {
                 print("Failed to convert Data to UIImage")
@@ -234,7 +206,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
                     self?.deleteRecord(id: expenseRecord.id)
                 }
                 cell.updateClosure = { [weak self] in
-                    self?.selectType(id: expenseRecord.id, type: "Expense")
+                    self?.selectType(id: expenseRecord.id, type: Expense.entityName)
                 }
             } else {
                 print("Failed to convert Data to UIImage")

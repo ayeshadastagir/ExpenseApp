@@ -215,11 +215,15 @@ extension IncomeViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CustomTableViewCell.reuseIdentifier, for: indexPath) as! CustomTableViewCell
         cell.selectCategoryType = { [weak self] selectedLabelText, img in
-            self?.selectCategoryView.didUpdateCategory(name: selectedLabelText ?? "", img: img!) 
+            self?.selectCategoryView.didUpdateCategory(
+                name: selectedLabelText ?? "",
+                img: img!) 
             self?.resetUI()
         }
         let card = incomeType[indexPath.row]
-        cell.configure(text: card.label, icon: UIImage(named: card.icon))
+        cell.configure(
+            text: card.label,
+            icon: UIImage(named: card.icon))
         return cell
     }
 }

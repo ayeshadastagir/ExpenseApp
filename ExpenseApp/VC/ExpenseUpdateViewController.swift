@@ -164,7 +164,6 @@ class ExpenseUpdateViewController: UIViewController {
     
     private func populateFields() {
         guard let expenseData = existingExpenseData else { return }
-        
         enterAmountTF.text = expenseData.amount
         explainationTF.text = expenseData.explanation
         selectCategoryView.didUpdateCategory(
@@ -204,22 +203,8 @@ class ExpenseUpdateViewController: UIViewController {
     
     @objc private func validateAndDatafetching() {
         let dbFetching = DatabaseHandling()
-        var totalExpense: Int = 0
-        if let expenseRecords = dbFetching?.fetchExpense() {
-            expenseRecords.forEach {
-                if let amount = Int($0.amount) { totalExpense += amount }
-            }
-        } else {
-            print("No expense records found.")
-        }
-        var totalIncome: Int = 0
-        if let incomeRecords = dbFetching?.fetchIncome() {
-            incomeRecords.forEach {
-                if let amount = Int($0.amount) { totalIncome += amount }
-            }
-        } else {
-            print("No income records found.")
-        }
+        let totalExpense = dbFetching?.totalExpense() ?? 0
+        let totalIncome = dbFetching?.totalIncome() ?? 0
         let balance = totalIncome - totalExpense
         let amt = Int(enterAmountTF.text ?? "0" )
         if amt ?? 0 > balance {
@@ -285,9 +270,13 @@ extension ExpenseUpdateViewController: UITableViewDataSource, UITableViewDelegat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CustomTableViewCell.reuseIdentifier, for: indexPath) as! CustomTableViewCell
         let card = expenseType[indexPath.row]
-        cell.configure(text: card.label, icon: UIImage(named: card.icon))
+        cell.configure(
+            text: card.label,
+            icon: UIImage(named: card.icon))
         cell.selectCategoryType = { [weak self] selectedLabelText, img in
-            self?.selectCategoryView.didUpdateCategory(name: selectedLabelText ?? "", img: img!)
+            self?.selectCategoryView.didUpdateCategory(
+                name: selectedLabelText ?? "",
+                img: img!)
             self?.resetUI()
         }
         return cell
