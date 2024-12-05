@@ -11,6 +11,11 @@
 		7B11B4072CEB4DB300C99BA1 /* ExpenseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B11B4062CEB4DB300C99BA1 /* ExpenseModels.swift */; };
 		7B11B4092CEB4E3500C99BA1 /* IncomeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B11B4082CEB4E3500C99BA1 /* IncomeModels.swift */; };
 		7B34BD802D0084B1004A739B /* CurrencyConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B34BD7F2D0084B1004A739B /* CurrencyConvert.swift */; };
+		7B369AA72D018AB9007AFDED /* AmountBaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B369AA62D018AB9007AFDED /* AmountBaseController.swift */; };
+		7B369AA92D018BDF007AFDED /* IncomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B369AA82D018BDF007AFDED /* IncomeViewController.swift */; };
+		7B369AAB2D01B521007AFDED /* ExpenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B369AAA2D01B521007AFDED /* ExpenseViewController.swift */; };
+		7B369AAD2D01BA81007AFDED /* ExpenseUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B369AAC2D01BA81007AFDED /* ExpenseUpdateViewController.swift */; };
+		7B369AAF2D01BAA3007AFDED /* IncomeUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B369AAE2D01BAA3007AFDED /* IncomeUpdateViewController.swift */; };
 		7B5E47212CEF09F300AA3261 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5E47202CEF09F300AA3261 /* ColorExtension.swift */; };
 		7B5E47232CEF0F0100AA3261 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B5E47222CEF0F0100AA3261 /* Assets.xcassets */; };
 		7B6131292CEC675A0063AF5B /* Income+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6131272CEC675A0063AF5B /* Income+CoreDataClass.swift */; };
@@ -21,8 +26,6 @@
 		7B6131302CEC79E90063AF5B /* FinancialRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B61312F2CEC79E90063AF5B /* FinancialRecordExtension.swift */; };
 		7B6131322CEC7A680063AF5B /* financialRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B6131312CEC7A680063AF5B /* financialRecord.swift */; };
 		7B9C99402CE4735E00BFF031 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9C993F2CE4735E00BFF031 /* CustomTableViewCell.swift */; };
-		7BA143622CFD8D0800684E94 /* IncomeUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA143612CFD8D0800684E94 /* IncomeUpdateViewController.swift */; };
-		7BA143642CFD8F5000684E94 /* ExpenseUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BA143632CFD8F5000684E94 /* ExpenseUpdateViewController.swift */; };
 		7BE039612CE31D5200AB5170 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE039602CE31D5200AB5170 /* AppDelegate.swift */; };
 		7BE039632CE31D5200AB5170 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE039622CE31D5200AB5170 /* SceneDelegate.swift */; };
 		7BE039652CE31D5200AB5170 /* SplashScreenController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE039642CE31D5200AB5170 /* SplashScreenController.swift */; };
@@ -38,8 +41,6 @@
 		7BE039A12CE3226600AB5170 /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE039A02CE3226600AB5170 /* CustomTabBarController.swift */; };
 		7BE039A32CE322AB00AB5170 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE039A22CE322AB00AB5170 /* HomeViewController.swift */; };
 		7BE039A52CE322C600AB5170 /* TransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE039A42CE322C600AB5170 /* TransactionViewController.swift */; };
-		7BE039A72CE322DA00AB5170 /* ExpenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE039A62CE322DA00AB5170 /* ExpenseViewController.swift */; };
-		7BE039A92CE322F100AB5170 /* IncomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE039A82CE322F100AB5170 /* IncomeViewController.swift */; };
 		7BE039AE2CE3233E00AB5170 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE039AD2CE3233E00AB5170 /* CardView.swift */; };
 		7BE039B12CE3237400AB5170 /* IntExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE039B02CE3237400AB5170 /* IntExtension.swift */; };
 		7BE039B72CE3285300AB5170 /* DatabaseSaving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BE039B62CE3285300AB5170 /* DatabaseSaving.swift */; };
@@ -68,6 +69,11 @@
 		7B11B4062CEB4DB300C99BA1 /* ExpenseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseModels.swift; sourceTree = "<group>"; };
 		7B11B4082CEB4E3500C99BA1 /* IncomeModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeModels.swift; sourceTree = "<group>"; };
 		7B34BD7F2D0084B1004A739B /* CurrencyConvert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConvert.swift; sourceTree = "<group>"; };
+		7B369AA62D018AB9007AFDED /* AmountBaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountBaseController.swift; sourceTree = "<group>"; };
+		7B369AA82D018BDF007AFDED /* IncomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeViewController.swift; sourceTree = "<group>"; };
+		7B369AAA2D01B521007AFDED /* ExpenseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseViewController.swift; sourceTree = "<group>"; };
+		7B369AAC2D01BA81007AFDED /* ExpenseUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseUpdateViewController.swift; sourceTree = "<group>"; };
+		7B369AAE2D01BAA3007AFDED /* IncomeUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeUpdateViewController.swift; sourceTree = "<group>"; };
 		7B5E47202CEF09F300AA3261 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		7B5E47222CEF0F0100AA3261 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7B6131252CEC675A0063AF5B /* Income+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Income+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -78,8 +84,6 @@
 		7B61312F2CEC79E90063AF5B /* FinancialRecordExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancialRecordExtension.swift; sourceTree = "<group>"; };
 		7B6131312CEC7A680063AF5B /* financialRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = financialRecord.swift; sourceTree = "<group>"; };
 		7B9C993F2CE4735E00BFF031 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
-		7BA143612CFD8D0800684E94 /* IncomeUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeUpdateViewController.swift; sourceTree = "<group>"; };
-		7BA143632CFD8F5000684E94 /* ExpenseUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseUpdateViewController.swift; sourceTree = "<group>"; };
 		7BE0395D2CE31D5200AB5170 /* ExpenseApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExpenseApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BE039602CE31D5200AB5170 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7BE039622CE31D5200AB5170 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -99,8 +103,6 @@
 		7BE039A02CE3226600AB5170 /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		7BE039A22CE322AB00AB5170 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		7BE039A42CE322C600AB5170 /* TransactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewController.swift; sourceTree = "<group>"; };
-		7BE039A62CE322DA00AB5170 /* ExpenseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseViewController.swift; sourceTree = "<group>"; };
-		7BE039A82CE322F100AB5170 /* IncomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeViewController.swift; sourceTree = "<group>"; };
 		7BE039AD2CE3233E00AB5170 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		7BE039B02CE3237400AB5170 /* IntExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntExtension.swift; sourceTree = "<group>"; };
 		7BE039B62CE3285300AB5170 /* DatabaseSaving.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseSaving.swift; sourceTree = "<group>"; };
@@ -149,10 +151,11 @@
 				7BE039A02CE3226600AB5170 /* CustomTabBarController.swift */,
 				7BE039A22CE322AB00AB5170 /* HomeViewController.swift */,
 				7BE039A42CE322C600AB5170 /* TransactionViewController.swift */,
-				7BE039A62CE322DA00AB5170 /* ExpenseViewController.swift */,
-				7BE039A82CE322F100AB5170 /* IncomeViewController.swift */,
-				7BA143612CFD8D0800684E94 /* IncomeUpdateViewController.swift */,
-				7BA143632CFD8F5000684E94 /* ExpenseUpdateViewController.swift */,
+				7B369AA62D018AB9007AFDED /* AmountBaseController.swift */,
+				7B369AA82D018BDF007AFDED /* IncomeViewController.swift */,
+				7B369AAA2D01B521007AFDED /* ExpenseViewController.swift */,
+				7B369AAC2D01BA81007AFDED /* ExpenseUpdateViewController.swift */,
+				7B369AAE2D01BAA3007AFDED /* IncomeUpdateViewController.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -405,12 +408,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B61312E2CEC6D7E0063AF5B /* DateExtension.swift in Sources */,
+				7B369AAB2D01B521007AFDED /* ExpenseViewController.swift in Sources */,
 				7BE039972CE321B000AB5170 /* Button.swift in Sources */,
-				7BA143642CFD8F5000684E94 /* ExpenseUpdateViewController.swift in Sources */,
+				7B369AA72D018AB9007AFDED /* AmountBaseController.swift in Sources */,
 				7BE0399F2CE321EF00AB5170 /* Image.swift in Sources */,
 				7B9C99402CE4735E00BFF031 /* CustomTableViewCell.swift in Sources */,
 				7BE039A12CE3226600AB5170 /* CustomTabBarController.swift in Sources */,
-				7BE039A72CE322DA00AB5170 /* ExpenseViewController.swift in Sources */,
 				7BE0396B2CE31D5200AB5170 /* ExpenseApp.xcdatamodeld in Sources */,
 				7BE039992CE321C000AB5170 /* View.swift in Sources */,
 				7BE0399B2CE321CF00AB5170 /* TextField.swift in Sources */,
@@ -418,9 +421,9 @@
 				7B5E47212CEF09F300AA3261 /* ColorExtension.swift in Sources */,
 				7B11B4092CEB4E3500C99BA1 /* IncomeModels.swift in Sources */,
 				7BE039A52CE322C600AB5170 /* TransactionViewController.swift in Sources */,
+				7B369AA92D018BDF007AFDED /* IncomeViewController.swift in Sources */,
 				7BE039B72CE3285300AB5170 /* DatabaseSaving.swift in Sources */,
 				7B11B3FC2CEB123600C99BA1 /* TransactionTableViewCell.swift in Sources */,
-				7BA143622CFD8D0800684E94 /* IncomeUpdateViewController.swift in Sources */,
 				7BE039A32CE322AB00AB5170 /* HomeViewController.swift in Sources */,
 				7BE039612CE31D5200AB5170 /* AppDelegate.swift in Sources */,
 				7B61312A2CEC675A0063AF5B /* Expense+CoreDataClass.swift in Sources */,
@@ -431,7 +434,8 @@
 				7B11B4072CEB4DB300C99BA1 /* ExpenseModels.swift in Sources */,
 				7B6131302CEC79E90063AF5B /* FinancialRecordExtension.swift in Sources */,
 				7B34BD802D0084B1004A739B /* CurrencyConvert.swift in Sources */,
-				7BE039A92CE322F100AB5170 /* IncomeViewController.swift in Sources */,
+				7B369AAF2D01BAA3007AFDED /* IncomeUpdateViewController.swift in Sources */,
+				7B369AAD2D01BA81007AFDED /* ExpenseUpdateViewController.swift in Sources */,
 				7BE0399D2CE321DD00AB5170 /* Label.swift in Sources */,
 				7BE039AE2CE3233E00AB5170 /* CardView.swift in Sources */,
 				7BE039632CE31D5200AB5170 /* SceneDelegate.swift in Sources */,

@@ -68,6 +68,7 @@ class TransactionViewController: UIViewController {
             transactionsTableView.isHidden = false
             searchTextField.alpha = 1
             searchTextField.isEnabled = true
+            transactionsTableView.reloadData()
         } else {
             transactionsTableView.isHidden = true
             searchTextField.alpha = 0.5
@@ -88,12 +89,14 @@ class TransactionViewController: UIViewController {
             case .income(let incomeRecord):
                 recordText = "\(incomeRecord.category) \(incomeRecord.explanation) \(incomeRecord.amount) \(incomeRecord.date.formattedString() + "$+")"
             case .expense(let expenseRecord):
-                recordText = "\(expenseRecord.category) \(expenseRecord.explanation) \(expenseRecord.amount) \(expenseRecord.date.formattedString() + "-$+")"
+                recordText = "\(expenseRecord.category) \(expenseRecord.explanation) \(expenseRecord.amount) \(expenseRecord.date.formattedString() + "-$")"
             }
             return recordText.lowercased().contains(searchText.lowercased())
         }
         transactionsTableView.reloadData()
     }
+
+
     
     private func deleteRecord(id: UUID, oldValue: String, type: String) {
         let dbHandling = DatabaseHandling()
@@ -163,7 +166,7 @@ extension TransactionViewController: UITableViewDataSource, UITableViewDelegate 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: TransactionTableViewCell.reuseIdentifier, for: indexPath) as! TransactionTableViewCell
-        let record = financialRecords[indexPath.row]
+        let record = filteredRecords[indexPath.row]
         switch record {
         case .income(let incomeRecord):
             if let iconImage = UIImage(data: incomeRecord.image) {
