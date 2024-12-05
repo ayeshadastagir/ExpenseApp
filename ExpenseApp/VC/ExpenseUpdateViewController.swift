@@ -223,7 +223,7 @@ class ExpenseUpdateViewController: UIViewController {
         guard let selectedImage = selectCategoryView.logo.image?.pngData() else { return }
         
         let updatedExpense = ExpenseData(
-            amount: enterAmountTF.text ?? "",
+            amount: enterAmountTF.text?.justifyNumber ?? "",
             category: selectCategoryView.selectedCategoryLabel.text ?? "",
             explanation: explainationTF.text ?? "",
             image: selectedImage,

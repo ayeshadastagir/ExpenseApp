@@ -101,25 +101,27 @@ class HomeViewController: UIViewController {
         }
     }
     
-   private func deleteRecord(id: UUID) {
+    private func deleteRecord(id: UUID, oldValue: String, type: String) {
         let dbHandling = DatabaseHandling()
-        let record = financialRecords.first { record in
-            switch record {
-            case .income(let incomeRecord):
-                return incomeRecord.id == id
-            case .expense(let expenseRecord):
-                return expenseRecord.id == id
+        if type == "Income" {
+            let result = dbHandling?.deleteRecord(type: Income.self, id: id, oldValue: oldValue)
+            if result == false {
+                let alertController = UIAlertController(
+                    title: "Deletion Failed",
+                    message: "Expense exceeds total Income, cannot delete this Income Record",
+                    preferredStyle: .actionSheet
+                )
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                alertController.addAction(cancelAction)
+                
+                present(alertController, animated: true)
             }
         }
-        guard let record = record else {
-            print("Record not found")
-            return
-        }
-        switch record {
-        case .income:
-            dbHandling?.deleteRecord(type: Income.self, id: id)
-        case .expense:
-            dbHandling?.deleteRecord(type: Expense.self, id: id)
+        if type == "Expense" {
+            let result = dbHandling?.deleteRecord(type: Expense.self, id: id, oldValue: oldValue)
+            if result == true {
+                print("Selected Expense record deleted successfully")
+            }
         }
         fetchData()
         updateAmounts()
@@ -182,7 +184,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
                     date: incomeRecord.date.formattedString()
                 )
                 cell.deleteClosure = { [weak self] in
-                    self?.deleteRecord(id: incomeRecord.id)
+                    self?.deleteRecord(id: incomeRecord.id, oldValue: incomeRecord.amount, type: Income.entityName)
                 }
                 cell.updateClosure = { [weak self] in
                     self?.selectType(id: incomeRecord.id, type: Income.entityName)
@@ -202,7 +204,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
                     date: expenseRecord.date.formattedString()
                 )
                 cell.deleteClosure = { [weak self] in
-                    self?.deleteRecord(id: expenseRecord.id)
+                    self?.deleteRecord(id: expenseRecord.id, oldValue: expenseRecord.amount, type: Expense.entityName)
                 }
                 cell.updateClosure = { [weak self] in
                     self?.selectType(id: expenseRecord.id, type: Expense.entityName)

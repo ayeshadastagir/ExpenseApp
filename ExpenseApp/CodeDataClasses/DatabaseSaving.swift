@@ -104,7 +104,15 @@ class DatabaseHandling {
         }
     }
     
-    func deleteRecord<T: NSManagedObject>(type: T.Type, id: UUID)  {
+    func deleteRecord<T: NSManagedObject>(type: T.Type, id: UUID, oldValue: String?) -> Bool  {
+        if type == Income.self {
+            let totalIncome = totalIncome()
+            let totalExpense = totalExpense()
+            if let value = Int(oldValue ?? "0"), totalExpense > totalIncome - value {
+                print("Expense exceeds total Income, cannot delete this record")
+                return false
+            }
+        }
         let fetchRequest: NSFetchRequest<T> = type.fetchRequest() as! NSFetchRequest<T>
         do {
             let results = try context.fetch(fetchRequest)
@@ -119,6 +127,7 @@ class DatabaseHandling {
         } catch {
             print("Error deleting record")
         }
+        return true
     }
     
     func fetchSpecificIncome(id: UUID) -> IncomeData? {

@@ -14,7 +14,7 @@ extension String {
         return formatter.string(from: number) ?? self
     }
     
-    private var justifyNumber: String {
+    var justifyNumber: String {
         let number = Set("1234567890")
         return self.filter( { number.contains($0) } )
     }

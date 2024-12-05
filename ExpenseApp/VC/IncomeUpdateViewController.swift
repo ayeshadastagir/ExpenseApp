@@ -207,7 +207,7 @@ class IncomeUpdateViewController: UIViewController {
         homeScreen.modalPresentationStyle = .fullScreen
         
         let updatedIncome = IncomeData(
-            amount: enterAmountTF.text ?? "",
+            amount: enterAmountTF.text?.justifyNumber ?? "",
             category: selectCategoryView.selectedCategoryLabel.text ?? "",
             explanation: explainationTF.text ?? "",
             image: selectedImage,

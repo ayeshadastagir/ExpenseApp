@@ -161,7 +161,7 @@ class IncomeViewController: UIViewController {
         let dataHandler = DatabaseHandling()
         guard let selectedImage = selectCategoryView.logo.image?.pngData() else { return }
         let income = IncomeData(
-            amount: enterAmountTF.text ?? "",
+            amount: enterAmountTF.text?.justifyNumber ?? "",
             category: selectCategoryView.selectedCategoryLabel.text ?? "",
             explanation: explainationTF.text ?? "",
             image: selectedImage,

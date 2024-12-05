@@ -111,7 +111,7 @@ class ExpenseViewController: UIViewController {
             expenseDetailView.topAnchor.constraint(equalTo: enterAmountTF.bottomAnchor, constant: 100.autoSized),
             expenseDetailView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             expenseDetailView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            expenseDetailView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 30),
+            expenseDetailView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 30.autoSized),
             
             selectCategoryView.topAnchor.constraint(equalTo: expenseDetailView.topAnchor, constant: 40.autoSized),
             selectCategoryView.leadingAnchor.constraint(equalTo: expenseDetailView.leadingAnchor, constant: 25.widthRatio),
@@ -212,7 +212,7 @@ class ExpenseViewController: UIViewController {
         let dataHandler = DatabaseHandling()
         guard let selectedImage = selectCategoryView.logo.image?.pngData() else { return }
         let expense = ExpenseData(
-            amount: enterAmountTF.text ?? "",
+            amount: enterAmountTF.text?.justifyNumber ?? "",
             category: selectCategoryView.selectedCategoryLabel.text ?? "",
             explanation: explainationTF.text ?? "",
             image: selectedImage,
@@ -253,7 +253,7 @@ extension ExpenseViewController: UITableViewDataSource, UITableViewDelegate {
         cell.selectCategoryType = { [weak self] selectedLabelText, img in
             self?.selectCategoryView.didUpdateCategory(
                 name: selectedLabelText ?? "",
-                img: img!)
+                img: img)
             self?.resetUI()
         }
         return cell
