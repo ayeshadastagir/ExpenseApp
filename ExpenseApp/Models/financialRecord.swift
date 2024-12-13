@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 enum FinancialRecord {
     case income(IncomeData)
