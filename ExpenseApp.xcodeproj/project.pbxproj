@@ -12,7 +12,8 @@
 		7B11B4092CEB4E3500C99BA1 /* IncomeModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B11B4082CEB4E3500C99BA1 /* IncomeModels.swift */; };
 		7B34BD802D0084B1004A739B /* CurrencyConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B34BD7F2D0084B1004A739B /* CurrencyConvert.swift */; };
 		7B357D9B2D11522B00ABB8F7 /* TransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B357D9A2D11522B00ABB8F7 /* TransactionViewModel.swift */; };
-		7B357DA62D117A6A00ABB8F7 /* AmountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B357DA52D117A6A00ABB8F7 /* AmountViewModel.swift */; };
+		7B357DA82D1180EA00ABB8F7 /* ExpenseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B357DA72D1180EA00ABB8F7 /* ExpenseViewModel.swift */; };
+		7B357DAA2D11823F00ABB8F7 /* IncomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B357DA92D11823F00ABB8F7 /* IncomeViewModel.swift */; };
 		7B369AA72D018AB9007AFDED /* AmountBaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B369AA62D018AB9007AFDED /* AmountBaseController.swift */; };
 		7B369AA92D018BDF007AFDED /* IncomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B369AA82D018BDF007AFDED /* IncomeViewController.swift */; };
 		7B369AAB2D01B521007AFDED /* ExpenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B369AAA2D01B521007AFDED /* ExpenseViewController.swift */; };
@@ -73,7 +74,8 @@
 		7B11B4082CEB4E3500C99BA1 /* IncomeModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeModels.swift; sourceTree = "<group>"; };
 		7B34BD7F2D0084B1004A739B /* CurrencyConvert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConvert.swift; sourceTree = "<group>"; };
 		7B357D9A2D11522B00ABB8F7 /* TransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewModel.swift; sourceTree = "<group>"; };
-		7B357DA52D117A6A00ABB8F7 /* AmountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountViewModel.swift; sourceTree = "<group>"; };
+		7B357DA72D1180EA00ABB8F7 /* ExpenseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseViewModel.swift; sourceTree = "<group>"; };
+		7B357DA92D11823F00ABB8F7 /* IncomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeViewModel.swift; sourceTree = "<group>"; };
 		7B369AA62D018AB9007AFDED /* AmountBaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountBaseController.swift; sourceTree = "<group>"; };
 		7B369AA82D018BDF007AFDED /* IncomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeViewController.swift; sourceTree = "<group>"; };
 		7B369AAA2D01B521007AFDED /* ExpenseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseViewController.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				7B369AA82D018BDF007AFDED /* IncomeViewController.swift */,
+				7B357DA92D11823F00ABB8F7 /* IncomeViewModel.swift */,
 			);
 			path = IncomeScreen;
 			sourceTree = "<group>";
@@ -171,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				7B369AAA2D01B521007AFDED /* ExpenseViewController.swift */,
+				7B357DA72D1180EA00ABB8F7 /* ExpenseViewModel.swift */,
 			);
 			path = ExpenseScreen;
 			sourceTree = "<group>";
@@ -211,7 +215,6 @@
 			isa = PBXGroup;
 			children = (
 				7B369AA62D018AB9007AFDED /* AmountBaseController.swift */,
-				7B357DA52D117A6A00ABB8F7 /* AmountViewModel.swift */,
 			);
 			path = AmountBaseVC;
 			sourceTree = "<group>";
@@ -518,7 +521,6 @@
 				7B357D9B2D11522B00ABB8F7 /* TransactionViewModel.swift in Sources */,
 				7B5E47212CEF09F300AA3261 /* ColorExtension.swift in Sources */,
 				7B11B4092CEB4E3500C99BA1 /* IncomeModels.swift in Sources */,
-				7B357DA62D117A6A00ABB8F7 /* AmountViewModel.swift in Sources */,
 				7BE039A52CE322C600AB5170 /* TransactionViewController.swift in Sources */,
 				7B369AA92D018BDF007AFDED /* IncomeViewController.swift in Sources */,
 				7BE039B72CE3285300AB5170 /* DatabaseSaving.swift in Sources */,
@@ -526,6 +528,7 @@
 				7BE039A32CE322AB00AB5170 /* HomeViewController.swift in Sources */,
 				7BE039612CE31D5200AB5170 /* AppDelegate.swift in Sources */,
 				7B61312A2CEC675A0063AF5B /* Expense+CoreDataClass.swift in Sources */,
+				7B357DA82D1180EA00ABB8F7 /* ExpenseViewModel.swift in Sources */,
 				7B5AF5AA2D1024190060EC6F /* HomeViewModel.swift in Sources */,
 				7BE039B12CE3237400AB5170 /* IntExtension.swift in Sources */,
 				7B6131322CEC7A680063AF5B /* financialRecord.swift in Sources */,
@@ -539,6 +542,7 @@
 				7BE0399D2CE321DD00AB5170 /* Label.swift in Sources */,
 				7BE039AE2CE3233E00AB5170 /* CardView.swift in Sources */,
 				7BE039632CE31D5200AB5170 /* SceneDelegate.swift in Sources */,
+				7B357DAA2D11823F00ABB8F7 /* IncomeViewModel.swift in Sources */,
 				7B61312C2CEC675A0063AF5B /* Expense+CoreDataProperties.swift in Sources */,
 				7B6131292CEC675A0063AF5B /* Income+CoreDataClass.swift in Sources */,
 			);

@@ -70,7 +70,6 @@ class AmountBaseController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .customGreen
         setupUI()
-        validateFields()
     }
     
     override func viewWillAppear(_ animated: Bool) {

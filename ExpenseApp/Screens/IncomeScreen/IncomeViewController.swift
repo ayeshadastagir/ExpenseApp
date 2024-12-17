@@ -9,35 +9,43 @@ import UIKit
 
 class IncomeViewController: AmountBaseController {
     
-    private let incomeType: [IncomeCategory] = [
-        IncomeCategory(icon: "other", label: "Other"),
-        IncomeCategory(icon: "freelance", label: "Freelance"),
-        IncomeCategory(icon: "salary", label: "Salary"),
-    ]
+    private let viewModel = IncomeViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setDesiredUI()
+        view.backgroundColor = .customGreen
+        setupUI()
+        bindViewModel()
     }
     
-    private func setDesiredUI() {
+    private func setupUI() {
         incomeLabel.text = "Income"
+        addButton.backgroundColor = .customGreen
         tableView.dataSource = self
         tableView.delegate = self
     }
     
+    private func bindViewModel() {
+        viewModel.onSaveSuccess = { [weak self] in
+            self?.showHomeScreen()
+        }
+        
+        viewModel.onSaveFailure = { [weak self] message in
+            self?.showErrorAlert(message: message)
+        }
+    }
+    
     override func dataSaved() {
-        let dataHandler = DatabaseHandling()
         guard let selectedImage = selectCategoryView.logo.image?.pngData() else { return }
-        let income = IncomeData(
+        viewModel.saveIncome(
             amount: enterAmountTF.text?.justifyNumber ?? "",
             category: selectCategoryView.selectedCategoryLabel.text ?? "",
             explanation: explainationTF.text ?? "",
-            image: selectedImage,
-            date: Date(),
-            id: UUID()
+            image: selectedImage
         )
-        dataHandler?.saveIncome(incomeData: income)
+    }
+    
+    private func showHomeScreen() {
         super.setDefaultValue()
         let homeScreen = CustomTabBarController()
         homeScreen.modalTransitionStyle = .crossDissolve
@@ -45,12 +53,23 @@ class IncomeViewController: AmountBaseController {
         self.present(homeScreen, animated: true, completion: nil)
     }
     
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(
+            title: "Cannot Add Income",
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+        super.setDefaultValue()
+    }
+    
 }
 
 extension IncomeViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return incomeType.count
+        return viewModel.incomeType.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -61,7 +80,7 @@ extension IncomeViewController: UITableViewDataSource, UITableViewDelegate {
                 img: img)
             self?.resetUI()
         }
-        let card = incomeType[indexPath.row]
+        let card = viewModel.incomeType[indexPath.row]
         cell.configure(
             text: card.label,
             icon: UIImage(named: card.icon))
