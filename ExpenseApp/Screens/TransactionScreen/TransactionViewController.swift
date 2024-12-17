@@ -3,8 +3,6 @@ import UIKit
 class TransactionViewController: UIViewController {
     
     private let financialReportLabel = Label(text: "Financial Report", textColor: .customPurple, font: .systemFont(ofSize: 25.autoSized, weight: .semibold), textAlignment: .left)
-    private var financialRecords: [FinancialRecord] = []
-    private var filteredRecords: [FinancialRecord] = []
     private lazy var searchTextField: TextField = {
         let tf = TextField( textAlignment: .left, font: .systemFont(ofSize: 15.autoSized), placeholder: "Transaction Details", cornerRadius: 15.autoSized, color: UIColor.customPurple.cgColor)
         let PaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20.autoSized, height: tf.frame.height))
@@ -29,12 +27,23 @@ class TransactionViewController: UIViewController {
         tv.register(TransactionTableViewCell.self, forCellReuseIdentifier: TransactionTableViewCell.reuseIdentifier)
         return tv
     }()
+    private let viewModel: TransactionViewModel
+    
+    init(viewModel: TransactionViewModel = TransactionViewModel()) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupUI()
-        fetchData()
+        bindViewModel()
+        viewModel.fetchData()
     }
     
     private func setupUI() {
@@ -59,68 +68,16 @@ class TransactionViewController: UIViewController {
         ])
     }
     
-    private func fetchData() {
-        let dbFetching = DatabaseHandling()
-        let sortedRecords = dbFetching?.fetchAllFinancialRecords() ?? []
-        financialRecords = sortedRecords
-        filteredRecords = sortedRecords
-        if !financialRecords.isEmpty {
-            transactionsTableView.isHidden = false
-            searchTextField.alpha = 1
-            searchTextField.isEnabled = true
-            transactionsTableView.reloadData()
-        } else {
-            transactionsTableView.isHidden = true
-            searchTextField.alpha = 0.5
-            searchTextField.isEnabled = false
-        }
-        transactionsTableView.reloadData()
-    }
-    
-    @objc private func searchTextChanged() {
-        guard let searchText = searchTextField.text, !searchText.isEmpty else {
-            filteredRecords = financialRecords
-            transactionsTableView.reloadData()
-            return
-        }
-        filteredRecords = financialRecords.filter {
-            let recordText: String
-            switch $0 {
-            case .income(let incomeRecord):
-                recordText = "\(incomeRecord.category) \(incomeRecord.explanation) \(incomeRecord.amount) \(incomeRecord.date.formattedString() + "$+")"
-            case .expense(let expenseRecord):
-                recordText = "\(expenseRecord.category) \(expenseRecord.explanation) \(expenseRecord.amount) \(expenseRecord.date.formattedString() + "-$")"
-            }
-            return recordText.lowercased().contains(searchText.lowercased())
-        }
-        transactionsTableView.reloadData()
-    }
-
-
-    
-    private func deleteRecord(id: UUID, oldValue: String, type: String) {
-        let dbHandling = DatabaseHandling()
-        if type == "Income" {
-            let result = dbHandling?.deleteRecord(type: Income.self, id: id, oldValue: oldValue)
-            if result == false {
-                let alertController = UIAlertController(
-                    title: "Deletion Failed",
-                    message: "Expense exceeds total Income, cannot delete this Income Record",
-                    preferredStyle: .actionSheet
-                )
-                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                alertController.addAction(cancelAction)
-                
-                present(alertController, animated: true)
+    private func bindViewModel() {
+        viewModel.onDataUpdated = { [weak self] in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.transactionsTableView.isHidden = self.viewModel.filteredRecords.isEmpty
+                self.transactionsTableView.reloadData()
+                self.searchTextField.alpha = self.viewModel.filteredRecords.isEmpty ? 0.5 : 1.0
+                self.searchTextField.isEnabled = !self.viewModel.filteredRecords.isEmpty
             }
         }
-        if type == "Expense" {
-            let result = dbHandling?.deleteRecord(type: Expense.self, id: id, oldValue: oldValue)
-            if result == true {
-                print("Selected Expense record deleted successfully")
-            }
-        }
-        fetchData()
     }
     
     private func selectType(id: UUID, type: String) {
@@ -153,7 +110,25 @@ class TransactionViewController: UIViewController {
         alertController.addAction(cancelAction)
         
         present(alertController, animated: true)
-        fetchData()
+        viewModel.fetchData()
+        transactionsTableView.reloadData()
+    }
+    
+    private func errorAlert() {
+        let alertController = UIAlertController(
+            title: "Deletion Failed",
+            message: "Expense exceeds total Income, cannot delete this Income Record",
+            preferredStyle: .actionSheet
+        )
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true)
+    }
+    
+    @objc private func searchTextChanged() {
+        guard let searchText = searchTextField.text else { return }
+        viewModel.filterRecords(by: searchText)
         transactionsTableView.reloadData()
     }
 }
@@ -161,12 +136,12 @@ class TransactionViewController: UIViewController {
 extension TransactionViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredRecords.count
+        return viewModel.filteredRecords.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: TransactionTableViewCell.reuseIdentifier, for: indexPath) as! TransactionTableViewCell
-        let record = filteredRecords[indexPath.row]
+        let record = viewModel.filteredRecords[indexPath.row]
         switch record {
         case .income(let incomeRecord):
             if let iconImage = UIImage(data: incomeRecord.image) {
@@ -179,7 +154,11 @@ extension TransactionViewController: UITableViewDataSource, UITableViewDelegate 
                     date: incomeRecord.date.formattedString()
                 )
                 cell.deleteClosure = { [weak self] in
-                    self?.deleteRecord(id: incomeRecord.id, oldValue: incomeRecord.amount, type: Income.entityName)
+                    let res = self?.viewModel.databaseHandler?.deleteRecord(type: Income.self, id: incomeRecord.id, oldValue: incomeRecord.amount)
+                    self?.viewModel.fetchData()
+                    if res == false {
+                        self?.errorAlert()
+                    }
                 }
                 cell.updateClosure = { [weak self] in
                     self?.selectType(id: incomeRecord.id, type: Income.entityName)
@@ -199,7 +178,8 @@ extension TransactionViewController: UITableViewDataSource, UITableViewDelegate 
                     date: expenseRecord.date.formattedString()
                 )
                 cell.deleteClosure = { [weak self] in
-                    self?.deleteRecord(id: expenseRecord.id, oldValue: expenseRecord.amount, type: Expense.entityName)
+                    _ = self?.viewModel.databaseHandler?.deleteRecord(type: Expense.self, id: expenseRecord.id, oldValue: expenseRecord.amount)
+                    self?.viewModel.fetchData()
                 }
                 cell.updateClosure = { [weak self] in
                     self?.selectType(id: expenseRecord.id, type: Expense.entityName)

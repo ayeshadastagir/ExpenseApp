@@ -34,7 +34,6 @@ class ExpenseViewController: AmountBaseController {
     }
     
     override func dataSaved() {
-        super.dataSaved()
         let dataHandler = DatabaseHandling()
         guard let selectedImage = selectCategoryView.logo.image?.pngData() else { return }
         let expense = ExpenseData(

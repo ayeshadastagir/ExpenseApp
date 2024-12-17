@@ -114,6 +114,7 @@ class DatabaseHandling {
             }
         }
         let fetchRequest: NSFetchRequest<T> = type.fetchRequest() as! NSFetchRequest<T>
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         do {
             let results = try context.fetch(fetchRequest)
             
