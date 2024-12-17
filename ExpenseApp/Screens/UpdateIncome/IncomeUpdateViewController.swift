@@ -12,11 +12,7 @@ class IncomeUpdateViewController: IncomeViewController {
     private let recordId: UUID
     private var existingIncomeData: IncomeData?
     private var initialAmount: String?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        addButton.setTitle( "Update", for: .normal)
-    }
+
     init(recordId: UUID) {
         self.recordId = recordId
         super.init(nibName: nil, bundle: nil)
@@ -25,6 +21,11 @@ class IncomeUpdateViewController: IncomeViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        addButton.setTitle( "Update", for: .normal)
     }
     
     private func fetchExistingRecord() {
