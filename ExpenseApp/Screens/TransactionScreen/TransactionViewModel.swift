@@ -5,11 +5,6 @@ class TransactionViewModel {
     var filteredRecords: [FinancialRecord] = []
     
     var onDataUpdated: (() -> Void)?
-    var onError: ((String) -> Void)?
-    
-    init(databaseHandler: DatabaseHandling? = DatabaseHandling()) {
-        self.databaseHandler = databaseHandler
-    }
     
     func fetchData() {
         financialRecords = databaseHandler?.fetchAllFinancialRecords() ?? []

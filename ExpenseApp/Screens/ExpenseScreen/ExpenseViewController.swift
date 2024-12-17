@@ -18,6 +18,16 @@ class ExpenseViewController: AmountBaseController {
         bindViewModel()
     }
     
+    override func dataSaved() {
+        guard let selectedImage = selectCategoryView.logo.image?.pngData() else { return }
+        viewModel.saveExpense(
+            amount: enterAmountTF.text?.justifyNumber ?? "",
+            category: selectCategoryView.selectedCategoryLabel.text ?? "",
+            explanation: explainationTF.text ?? "",
+            image: selectedImage
+        )
+    }
+    
     private func setupUI() {
         incomeLabel.text = "Expense"
         addButton.backgroundColor = .customRed
@@ -34,17 +44,7 @@ class ExpenseViewController: AmountBaseController {
             self?.showErrorAlert(message: message)
         }
     }
-    
-    override func dataSaved() {
-        guard let selectedImage = selectCategoryView.logo.image?.pngData() else { return }
-        viewModel.saveExpense(
-            amount: enterAmountTF.text?.justifyNumber ?? "",
-            category: selectCategoryView.selectedCategoryLabel.text ?? "",
-            explanation: explainationTF.text ?? "",
-            image: selectedImage
-        )
-    }
-    
+
     private func showHomeScreen() {
         super.setDefaultValue()
         let homeScreen = CustomTabBarController()

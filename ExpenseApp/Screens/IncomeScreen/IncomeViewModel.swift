@@ -9,7 +9,6 @@ class IncomeViewModel {
         IncomeCategory(icon: "freelance", label: "Freelance"),
         IncomeCategory(icon: "salary", label: "Salary"),
     ]
-    
     var onSaveSuccess: (() -> Void)?
     var onSaveFailure: ((String) -> Void)?
     

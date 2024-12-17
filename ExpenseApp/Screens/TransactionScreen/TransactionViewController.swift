@@ -42,7 +42,7 @@ class TransactionViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupUI()
-        bindViewModel()
+        bindViews()
         viewModel.fetchData()
     }
     
@@ -68,15 +68,13 @@ class TransactionViewController: UIViewController {
         ])
     }
     
-    private func bindViewModel() {
+    private func bindViews() {
         viewModel.onDataUpdated = { [weak self] in
             guard let self = self else { return }
-            DispatchQueue.main.async {
-                self.transactionsTableView.isHidden = self.viewModel.filteredRecords.isEmpty
-                self.transactionsTableView.reloadData()
-                self.searchTextField.alpha = self.viewModel.filteredRecords.isEmpty ? 0.5 : 1.0
-                self.searchTextField.isEnabled = !self.viewModel.filteredRecords.isEmpty
-            }
+            self.transactionsTableView.isHidden = self.viewModel.filteredRecords.isEmpty
+            self.transactionsTableView.reloadData()
+            self.searchTextField.alpha = self.viewModel.filteredRecords.isEmpty ? 0.5 : 1.0
+            self.searchTextField.isEnabled = !self.viewModel.filteredRecords.isEmpty
         }
     }
     

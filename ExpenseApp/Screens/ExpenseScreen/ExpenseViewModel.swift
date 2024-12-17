@@ -14,7 +14,6 @@ class ExpenseViewModel {
         ExpenseCategory(icon: "invest", label: "Investment"),
         ExpenseCategory(icon: "other", label: "Others")
     ]
-    
     var onSaveSuccess: (() -> Void)?
     var onSaveFailure: ((String) -> Void)?
     
