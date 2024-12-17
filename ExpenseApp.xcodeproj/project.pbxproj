@@ -14,6 +14,8 @@
 		7B357D9B2D11522B00ABB8F7 /* TransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B357D9A2D11522B00ABB8F7 /* TransactionViewModel.swift */; };
 		7B357DA82D1180EA00ABB8F7 /* ExpenseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B357DA72D1180EA00ABB8F7 /* ExpenseViewModel.swift */; };
 		7B357DAA2D11823F00ABB8F7 /* IncomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B357DA92D11823F00ABB8F7 /* IncomeViewModel.swift */; };
+		7B357DAC2D1185AC00ABB8F7 /* IncomeUpdateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B357DAB2D1185AC00ABB8F7 /* IncomeUpdateViewModel.swift */; };
+		7B357DAE2D11882A00ABB8F7 /* ExpenseUpdateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B357DAD2D11882A00ABB8F7 /* ExpenseUpdateViewModel.swift */; };
 		7B369AA72D018AB9007AFDED /* AmountBaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B369AA62D018AB9007AFDED /* AmountBaseController.swift */; };
 		7B369AA92D018BDF007AFDED /* IncomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B369AA82D018BDF007AFDED /* IncomeViewController.swift */; };
 		7B369AAB2D01B521007AFDED /* ExpenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B369AAA2D01B521007AFDED /* ExpenseViewController.swift */; };
@@ -76,6 +78,8 @@
 		7B357D9A2D11522B00ABB8F7 /* TransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewModel.swift; sourceTree = "<group>"; };
 		7B357DA72D1180EA00ABB8F7 /* ExpenseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseViewModel.swift; sourceTree = "<group>"; };
 		7B357DA92D11823F00ABB8F7 /* IncomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeViewModel.swift; sourceTree = "<group>"; };
+		7B357DAB2D1185AC00ABB8F7 /* IncomeUpdateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeUpdateViewModel.swift; sourceTree = "<group>"; };
+		7B357DAD2D11882A00ABB8F7 /* ExpenseUpdateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseUpdateViewModel.swift; sourceTree = "<group>"; };
 		7B369AA62D018AB9007AFDED /* AmountBaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountBaseController.swift; sourceTree = "<group>"; };
 		7B369AA82D018BDF007AFDED /* IncomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeViewController.swift; sourceTree = "<group>"; };
 		7B369AAA2D01B521007AFDED /* ExpenseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseViewController.swift; sourceTree = "<group>"; };
@@ -183,6 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				7B369AAC2D01BA81007AFDED /* ExpenseUpdateViewController.swift */,
+				7B357DAD2D11882A00ABB8F7 /* ExpenseUpdateViewModel.swift */,
 			);
 			path = UpdateExpense;
 			sourceTree = "<group>";
@@ -191,6 +196,7 @@
 			isa = PBXGroup;
 			children = (
 				7B369AAE2D01BAA3007AFDED /* IncomeUpdateViewController.swift */,
+				7B357DAB2D1185AC00ABB8F7 /* IncomeUpdateViewModel.swift */,
 			);
 			path = UpdateIncome;
 			sourceTree = "<group>";
@@ -240,12 +246,12 @@
 		7B999A382D0C1DA80002D9D4 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				7B5AF5A82D1023D60060EC6F /* HomeViewController */,
+				7B357D962D114E4200ABB8F7 /* TransactionScreen */,
+				7B357D9E2D11796800ABB8F7 /* IncomeScreen */,
+				7B357D9F2D11799500ABB8F7 /* ExpenseScreen */,
 				7B357DA12D1179AE00ABB8F7 /* UpdateIncome */,
 				7B357DA02D1179A100ABB8F7 /* UpdateExpense */,
-				7B357D9F2D11799500ABB8F7 /* ExpenseScreen */,
-				7B357D9E2D11796800ABB8F7 /* IncomeScreen */,
-				7B357D962D114E4200ABB8F7 /* TransactionScreen */,
-				7B5AF5A82D1023D60060EC6F /* HomeViewController */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -513,6 +519,7 @@
 				7B369AA72D018AB9007AFDED /* AmountBaseController.swift in Sources */,
 				7BE0399F2CE321EF00AB5170 /* Image.swift in Sources */,
 				7B9C99402CE4735E00BFF031 /* CustomTableViewCell.swift in Sources */,
+				7B357DAC2D1185AC00ABB8F7 /* IncomeUpdateViewModel.swift in Sources */,
 				7BE039A12CE3226600AB5170 /* CustomTabBarController.swift in Sources */,
 				7BE0396B2CE31D5200AB5170 /* ExpenseApp.xcdatamodeld in Sources */,
 				7BE039992CE321C000AB5170 /* View.swift in Sources */,
@@ -528,6 +535,7 @@
 				7BE039A32CE322AB00AB5170 /* HomeViewController.swift in Sources */,
 				7BE039612CE31D5200AB5170 /* AppDelegate.swift in Sources */,
 				7B61312A2CEC675A0063AF5B /* Expense+CoreDataClass.swift in Sources */,
+				7B357DAE2D11882A00ABB8F7 /* ExpenseUpdateViewModel.swift in Sources */,
 				7B357DA82D1180EA00ABB8F7 /* ExpenseViewModel.swift in Sources */,
 				7B5AF5AA2D1024190060EC6F /* HomeViewModel.swift in Sources */,
 				7BE039B12CE3237400AB5170 /* IntExtension.swift in Sources */,

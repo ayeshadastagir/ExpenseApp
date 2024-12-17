@@ -2,8 +2,8 @@
 import Foundation
 
 class IncomeViewModel {
-    private let dataHandler = DatabaseHandling()
     
+    private let dataHandler = DatabaseHandling()
     let incomeType: [IncomeCategory] = [
         IncomeCategory(icon: "other", label: "Other"),
         IncomeCategory(icon: "freelance", label: "Freelance"),
