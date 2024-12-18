@@ -16,6 +16,7 @@
 		7B357DAA2D11823F00ABB8F7 /* IncomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B357DA92D11823F00ABB8F7 /* IncomeViewModel.swift */; };
 		7B357DAC2D1185AC00ABB8F7 /* IncomeUpdateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B357DAB2D1185AC00ABB8F7 /* IncomeUpdateViewModel.swift */; };
 		7B357DAE2D11882A00ABB8F7 /* ExpenseUpdateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B357DAD2D11882A00ABB8F7 /* ExpenseUpdateViewModel.swift */; };
+		7B357DB02D11A28C00ABB8F7 /* AmountBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B357DAF2D11A28C00ABB8F7 /* AmountBaseViewController.swift */; };
 		7B369AA72D018AB9007AFDED /* AmountBaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B369AA62D018AB9007AFDED /* AmountBaseController.swift */; };
 		7B369AA92D018BDF007AFDED /* IncomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B369AA82D018BDF007AFDED /* IncomeViewController.swift */; };
 		7B369AAB2D01B521007AFDED /* ExpenseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B369AAA2D01B521007AFDED /* ExpenseViewController.swift */; };
@@ -80,6 +81,7 @@
 		7B357DA92D11823F00ABB8F7 /* IncomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeViewModel.swift; sourceTree = "<group>"; };
 		7B357DAB2D1185AC00ABB8F7 /* IncomeUpdateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeUpdateViewModel.swift; sourceTree = "<group>"; };
 		7B357DAD2D11882A00ABB8F7 /* ExpenseUpdateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseUpdateViewModel.swift; sourceTree = "<group>"; };
+		7B357DAF2D11A28C00ABB8F7 /* AmountBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountBaseViewController.swift; sourceTree = "<group>"; };
 		7B369AA62D018AB9007AFDED /* AmountBaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountBaseController.swift; sourceTree = "<group>"; };
 		7B369AA82D018BDF007AFDED /* IncomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeViewController.swift; sourceTree = "<group>"; };
 		7B369AAA2D01B521007AFDED /* ExpenseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseViewController.swift; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 			isa = PBXGroup;
 			children = (
 				7B369AA62D018AB9007AFDED /* AmountBaseController.swift */,
+				7B357DAF2D11A28C00ABB8F7 /* AmountBaseViewController.swift */,
 			);
 			path = AmountBaseVC;
 			sourceTree = "<group>";
@@ -545,6 +548,7 @@
 				7B11B4072CEB4DB300C99BA1 /* ExpenseModels.swift in Sources */,
 				7B6131302CEC79E90063AF5B /* FinancialRecordExtension.swift in Sources */,
 				7B34BD802D0084B1004A739B /* CurrencyConvert.swift in Sources */,
+				7B357DB02D11A28C00ABB8F7 /* AmountBaseViewController.swift in Sources */,
 				7B369AAF2D01BAA3007AFDED /* IncomeUpdateViewController.swift in Sources */,
 				7B369AAD2D01BA81007AFDED /* ExpenseUpdateViewController.swift in Sources */,
 				7BE0399D2CE321DD00AB5170 /* Label.swift in Sources */,

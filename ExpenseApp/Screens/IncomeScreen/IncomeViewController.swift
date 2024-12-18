@@ -18,6 +18,17 @@ class IncomeViewController: AmountBaseController {
         bindViewModel()
     }
     
+    override func dataSaved() {
+        guard let selectedImage = selectCategoryView.logo.image?.pngData() else { return }
+        viewModel.saveIncome(
+            amount: enterAmountTF.text?.justifyNumber ?? "",
+            category: selectCategoryView.selectedCategoryLabel.text ?? "",
+            explanation: explainationTF.text ?? "",
+            image: selectedImage,
+            date: Date()
+        )
+    }
+    
     private func setupUI() {
         incomeLabel.text = "Income"
         addButton.backgroundColor = .customGreen
@@ -34,17 +45,7 @@ class IncomeViewController: AmountBaseController {
             self?.showErrorAlert(message: message)
         }
     }
-    
-    override func dataSaved() {
-        guard let selectedImage = selectCategoryView.logo.image?.pngData() else { return }
-        viewModel.saveIncome(
-            amount: enterAmountTF.text?.justifyNumber ?? "",
-            category: selectCategoryView.selectedCategoryLabel.text ?? "",
-            explanation: explainationTF.text ?? "",
-            image: selectedImage
-        )
-    }
-    
+  
     private func showHomeScreen() {
         super.setDefaultValue()
         let homeScreen = CustomTabBarController()

@@ -36,6 +36,7 @@ class ExpenseUpdateViewController: ExpenseViewController {
             name: expenseData.category,
             img: UIImage(data: expenseData.image)
         )
+        
         super.validateFields()
     }
     
@@ -54,10 +55,8 @@ class ExpenseUpdateViewController: ExpenseViewController {
               let amount = enterAmountTF.text?.justifyNumber,
               let category = selectCategoryView.selectedCategoryLabel.text,
               let explanation = explainationTF.text else { return }
+        viewModel.updateExpense(recordId: recordId, amount: amount, category: category, explanation: explanation, imageData: selectedImageData)
         
-        if viewModel.validateFields(amount: amount, category: category, explanation: explanation) {
-            viewModel.updateExpense(recordId: recordId, amount: amount, category: category, explanation: explanation, imageData: selectedImageData)
-        }
     }
     
     private func showHomeScreen() {

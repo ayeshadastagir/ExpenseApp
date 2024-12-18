@@ -7,9 +7,7 @@ class HomeViewModel {
     var totalIncome: Int = 0
     var totalExpense: Int = 0
     var balance: Int = 0
-
     var onDataUpdated: (() -> Void)?
-    let showAlert: (() -> Void)? = nil
 
     func fetchData() {
         financialRecords = Array(databaseHandler?.fetchAllFinancialRecords().prefix(5) ?? [] )
@@ -19,3 +17,4 @@ class HomeViewModel {
         onDataUpdated?()
     }
 }
+

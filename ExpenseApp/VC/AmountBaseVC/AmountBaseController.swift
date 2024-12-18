@@ -65,6 +65,7 @@ class AmountBaseController: UIViewController {
     private var categoryViewHeight: NSLayoutConstraint!
     private var tableBackgroundViewTop: NSLayoutConstraint!
     private var tableViewTop: NSLayoutConstraint!
+    private let viewModel = AmountBaseViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -183,10 +184,8 @@ class AmountBaseController: UIViewController {
     }
     
     @objc func validateFields() {
-        let isAmountFilled = !(enterAmountTF.text?.isEmpty ?? true)
-        let isCategorySelected = selectCategoryView.selectedCategoryLabel.text != "Category"
-        let isDescriptionFilled = !(explainationTF.text?.isEmpty ?? true)
-        if isAmountFilled && isCategorySelected && isDescriptionFilled {
+       let result = viewModel.checkFields(amount: enterAmountTF.text ?? "", category: selectCategoryView.selectedCategoryLabel.text ?? "", description: explainationTF.text ?? "")
+        if result == true {
             addButton.isEnabled = true
             addButton.alpha = 1.0
         } else {

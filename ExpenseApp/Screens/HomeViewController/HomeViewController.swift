@@ -1,5 +1,10 @@
 import UIKit
 
+enum FinancialRecord {
+    case income(IncomeData)
+    case expense(ExpenseData)
+}
+
 class HomeViewController: UIViewController {
 
     private let welcomeLabel = Label(text: "Welcome to Home", textColor: .customPurple, font: .systemFont(ofSize: 40.autoSized, weight: .semibold))
@@ -76,9 +81,7 @@ class HomeViewController: UIViewController {
 
     private func bindViewModel() {
         viewModel.onDataUpdated = { [weak self] in
-            DispatchQueue.main.async {
                 self?.updateUI()
-            }
         }
     }
 

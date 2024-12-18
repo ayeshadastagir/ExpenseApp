@@ -14,17 +14,16 @@ class ExpenseViewModel {
         ExpenseCategory(icon: "invest", label: "Investment"),
         ExpenseCategory(icon: "other", label: "Others")
     ]
-    
     var onSaveSuccess: (() -> Void)?
     var onSaveFailure: ((String) -> Void)?
     
-    func saveExpense(amount: String, category: String, explanation: String, image: Data) {
+    func saveExpense(amount: String, category: String, explanation: String, image: Data, date: Date) {
         let expense = ExpenseData(
             amount: amount,
             category: category,
             explanation: explanation,
             image: image,
-            date: Date(),
+            date: date,
             id: UUID()
         )
         

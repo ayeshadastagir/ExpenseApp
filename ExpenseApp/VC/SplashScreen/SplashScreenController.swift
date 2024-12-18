@@ -27,7 +27,7 @@ class SplashScreenController: UIViewController {
             let homeScreen = CustomTabBarController()
             homeScreen.modalTransitionStyle = .crossDissolve
             homeScreen.modalPresentationStyle = .fullScreen
-           self?.present(homeScreen, animated: true, completion: nil)
+            self?.present(homeScreen, animated: true, completion: nil)
         }
     }
 }
