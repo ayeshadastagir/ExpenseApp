@@ -54,10 +54,8 @@ class IncomeUpdateViewController: IncomeViewController {
               let amount = enterAmountTF.text?.justifyNumber,
               let category = selectCategoryView.selectedCategoryLabel.text,
               let explanation = explainationTF.text else { return }
-        
-        if viewModel.validateFields(amount: amount, category: category, explanation: explanation) {
+
             viewModel.updateIncome(recordId: recordId, amount: amount, category: category, explanation: explanation, imageData: selectedImageData)
-        }
     }
     
     private func showHomeScreen() {

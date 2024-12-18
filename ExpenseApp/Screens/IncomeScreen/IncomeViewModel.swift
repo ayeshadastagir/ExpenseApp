@@ -12,17 +12,17 @@ class IncomeViewModel {
     var onSaveSuccess: (() -> Void)?
     var onSaveFailure: ((String) -> Void)?
     
-    func saveIncome(amount: String, category: String, explanation: String, image: Data) {
+    func saveIncome(amount: String, category: String, explanation: String, image: Data, date: Date) {
         let income = IncomeData(
             amount: amount,
             category: category,
             explanation: explanation,
             image: image,
-            date: Date(),
+            date: date,
             id: UUID()
         )
         
-        if ((dataHandler?.saveIncome(incomeData: income)) != nil) == true {
+        if (((dataHandler?.saveIncome(incomeData: income)) ) != nil) == true {
             onSaveSuccess?()
         } else {
             onSaveFailure?("Expense amount exceeds wallet.")

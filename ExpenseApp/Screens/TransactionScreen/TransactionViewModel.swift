@@ -1,6 +1,6 @@
 class TransactionViewModel {
     
-    var databaseHandler: DatabaseHandling?
+    var databaseHandler = DatabaseHandling()
     var financialRecords: [FinancialRecord] = []
     var filteredRecords: [FinancialRecord] = []
     

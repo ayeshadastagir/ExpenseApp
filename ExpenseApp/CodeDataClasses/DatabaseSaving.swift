@@ -133,6 +133,7 @@ class DatabaseHandling {
     
     func fetchSpecificIncome(id: UUID) -> IncomeData? {
         let fetchRequest: NSFetchRequest<Income> = Income.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         do {
             let incomeData = try context.fetch(fetchRequest)
             if let income = incomeData.first {
@@ -144,6 +145,7 @@ class DatabaseHandling {
                     date: income.date ?? Date(),
                     id: income.id ?? UUID() )
                 return incomeDataModel
+                
             } else {
                 print("No income found for the given ID")
                 return nil
@@ -156,8 +158,11 @@ class DatabaseHandling {
     
     func fetchSpecificExpense(id: UUID) -> ExpenseData? {
         let fetchRequest: NSFetchRequest<Expense> = Expense.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         do {
+            
             let expenseData = try context.fetch(fetchRequest)
+            
             if let expense = expenseData.first {
                 let expenseModel = ExpenseData(
                     amount: expense.amount ?? "",
@@ -166,7 +171,9 @@ class DatabaseHandling {
                     image: expense.img ?? Data(),
                     date: expense.date ?? Date(),
                     id: expense.id ?? UUID() )
+                
                 return expenseModel
+                
             } else {
                 print("No expense found for the given ID")
                 return nil
@@ -196,6 +203,7 @@ class DatabaseHandling {
             return false
         }
         let fetchRequest: NSFetchRequest<Income> = Income.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         
         do {
             let incomeData = try context.fetch(fetchRequest)
@@ -232,18 +240,19 @@ class DatabaseHandling {
         }
         
         let fetchRequest: NSFetchRequest<Expense> = Expense.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         
         do {
             let expenseData = try context.fetch(fetchRequest)
             
             if let expense = expenseData.first {
-                
                 expense.amount = updatedExpenseData.amount
                 expense.category = updatedExpenseData.category
                 expense.explaination = updatedExpenseData.explanation
                 expense.img = updatedExpenseData.image
                 expense.date = updatedExpenseData.date
                 expense.id = updatedExpenseData.id
+                
                 try context.save()
                 print("Income data updated successfully")
                 return true

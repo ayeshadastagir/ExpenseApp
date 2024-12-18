@@ -24,7 +24,8 @@ class ExpenseViewController: AmountBaseController {
             amount: enterAmountTF.text?.justifyNumber ?? "",
             category: selectCategoryView.selectedCategoryLabel.text ?? "",
             explanation: explainationTF.text ?? "",
-            image: selectedImage
+            image: selectedImage,
+            date: Date()
         )
     }
     

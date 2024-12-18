@@ -12,10 +12,6 @@ class IncomeUpdateViewModel {
         existingIncomeData = dataHandler?.fetchSpecificIncome(id: recordId)
         initialAmount = existingIncomeData?.amount
     }
-    
-    func validateFields(amount: String, category: String, explanation: String) -> Bool {
-        return !amount.isEmpty && category != "Category" && !explanation.isEmpty
-    }
 
     func updateIncome(recordId: UUID, amount: String, category: String, explanation: String, imageData: Data) {
         guard let existingIncomeData = existingIncomeData else {
@@ -28,7 +24,7 @@ class IncomeUpdateViewModel {
             explanation: explanation,
             image: imageData,
             date: existingIncomeData.date,
-            id: recordId
+            id: existingIncomeData.id
         )
         
         if dataHandler?.updateIncome(id: recordId, updatedIncomeData: updatedIncome, oldValue: initialAmount ?? "") == true {

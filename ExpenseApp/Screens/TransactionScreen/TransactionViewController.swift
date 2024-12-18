@@ -27,16 +27,7 @@ class TransactionViewController: UIViewController {
         tv.register(TransactionTableViewCell.self, forCellReuseIdentifier: TransactionTableViewCell.reuseIdentifier)
         return tv
     }()
-    private let viewModel: TransactionViewModel
-    
-    init(viewModel: TransactionViewModel = TransactionViewModel()) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private let viewModel = TransactionViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
